@@ -1,5 +1,5 @@
-import {handleHttpErrors, sanitizeStringWithTableRows} from "/utils.js"
-import Card from '/Card.js';
+import {handleHttpErrors, sanitizeStringWithTableRows} from "../../utils/utils.js"
+import Card from '../../utils/Card.js';
 
 const URLgame = "http://localhost:8080/api/game-idea"
 
