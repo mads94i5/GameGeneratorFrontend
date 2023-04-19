@@ -40,9 +40,9 @@ window.addEventListener("load", async () => {
         renderTemplate(templateGames, "content")
         initGames()
       },
-      "/gamedetails": (match) => {
+      "/gamedetails/:id": ({data}) => {
         renderTemplate(templateGameDetails, "content")
-        initGameDetails()
+        initGameDetails(data.id)
       }
     })
     .notFound(() => {

@@ -7,12 +7,11 @@ export async function initGames() {
     const games = await fetchGetJson(URL);
     const rows = games.map(game => `
       <tr>
-        <td>${game.id}</td>
         <td>${game.title}</td>
-        <td>${game.description}</td>
+        <td>${game.description.slice(0, 50)}${game.description.length > 50 ? '...' : ''}</td>
         <td>${game.genre}</td>
         <td>${game.player}</td>
-        <td><a href="/gamedetails/${game.id}"><button>Game info</button></a></td>
+        <td><a href="#/gamedetails/${game.id}"><button class="btn-success">Game info</button></a></td>
       </tr>
     `);
     tbody.innerHTML = rows.join("");
