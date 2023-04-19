@@ -4,7 +4,7 @@ import "./utils/navigo_EditedByLars.js"  //Will create the global Navigo, with a
 
 import {
   setActiveLink, adjustForMissingHash, renderTemplate, loadHtml
-} from ".utils/utils.js"
+} from "./utils/utils.js"
 
 import { initGames } from "./pages/games/index.js"
 import { initGameDetails } from "./pages/gamedetails/index.js"
