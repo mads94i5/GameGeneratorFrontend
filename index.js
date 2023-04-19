@@ -8,6 +8,7 @@ import {
 
 import { initGames } from "./pages/games/index.js"
 import { initGameDetails } from "./pages/gamedetails/index.js"
+import { initHome } from "./pages/home/index.js";
 
 window.addEventListener("load", async () => {
 
@@ -33,6 +34,7 @@ window.addEventListener("load", async () => {
       //For very simple "templates", you can just insert your HTML directly like below
       "/": () => {
         renderTemplate(templateIndex, "content")
+        initHome()
       },
       "/games": () => {
         renderTemplate(templateGames, "content")

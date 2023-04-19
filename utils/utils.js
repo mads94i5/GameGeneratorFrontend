@@ -77,7 +77,7 @@ export async function fetchPostJsonFormData(URL, form, event) {
 export async function fetchGetJson(URL) {
   try {
     const data = await fetch(URL)
-    .then(handleJsonHttpErrors)
+    .then(handleHttpErrors)
     console.log("Data: ", data)
     return data;
   } catch (error) {
@@ -114,6 +114,12 @@ export function sanitizeStringWithTableRows(tableRows) {
   let secureRows = DOMPurify.sanitize("<table>" + tableRows + "</table>")
   secureRows = secureRows.replace("<table>", "").replace("</table>", "")
   return secureRows
+}
+
+export function sanitizeStringWithList(listGame) {
+  let secureList = DOMPurify.sanitize("<li>" + listGame + "</li>")
+  secureList = secureList.replace("<li>", "").replace("</li>", "")
+  return secureList
 }
 
 export function encode(str) {
