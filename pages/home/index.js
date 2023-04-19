@@ -4,9 +4,6 @@ import { fetchGetJson } from "../../utils/utils.js"
 
   
   export async function initHome(){
-
-    console.log("initiated");
-
     const spinner = document.getElementById("spinner");
     const stringList = document.getElementById("string-list");
     
@@ -21,13 +18,14 @@ import { fetchGetJson } from "../../utils/utils.js"
     console.log(game)
 
     const listGame = 
-        `  <h2>${game.title}</h2>
-          <p><strong>Description:</strong> ${game.description}</p>
-          <p><strong>Genre:</strong> ${game.genre}</p>
-          <p><strong>Number of players:</strong> ${game.player}</p>
-          <p><a href="/gamedetails/${game.id}"><button>Game info</button></a></p>
-        `;
-        
+    `<hr><h2>${game.title}</h2>
+    <p style="font-size: 0.8em;text-align: left;margin-left: 2em;margin-right: 2em;">
+    <strong>Description:</strong> ${game.description} <br>
+    <strong>Genre:</strong> ${game.genre} <br>
+    <strong>You play as:</strong> ${game.player} <br>
+    <strong>Image:</strong> <a href="${game.image}" target="_blank"><img src="${game.image}"></a> 
+    <p><a href="/gamedetails/${game.id}"><button class="btn-success">Game info</button></a></p>
+    </p><br>`;
 
       const okP = sanitizeStringWithParagraph(listGame);
       document.getElementById("string-list").innerHTML = okP;
