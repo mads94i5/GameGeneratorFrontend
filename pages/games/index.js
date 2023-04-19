@@ -1,9 +1,8 @@
 import { API_URL } from "../../utils/settings.js"
 import { fetchGetJson } from "../../utils/utils.js"
-const URL = API_URL + "games"
+const URL = API_URL + "game-idea/get-all"
 
 export async function initGames() {
-  /*
     const tbody = document.getElementById("table-rows");
     const games = await fetchGetJson(URL);
     const rows = games.map(game => `
@@ -17,5 +16,4 @@ export async function initGames() {
       </tr>
     `);
     tbody.innerHTML = rows.join("");
-    */
   }
