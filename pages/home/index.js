@@ -9,13 +9,12 @@ import { fetchGetJson } from "../../utils/utils.js"
     const game = await fetchGetJson(API_URL + "gameidea/create");
     console.log(game)
     const listGame = 
-        `<ul>
-        <li>${game.id}</li>
-        <li>${game.title}</li>
-        <li>${game.description}</li>
-        <li>${game.genre}</li>
-        <li>${game.player}</li>
-        <li><a href="/gamedetails/${game.id}"><button>Game info</button></a></li>
+        `  <h2>${game.title}</h2>
+        <ul>
+          <li><strong>ID:</strong> ${game.id}</li>
+          <li><strong>Description:</strong> ${game.description}</li>
+          <li><strong>Genre:</strong> ${game.genre}</li>
+          <li><strong>Number of players:</strong> ${game.player}</li>
         </ul>`
         
 
