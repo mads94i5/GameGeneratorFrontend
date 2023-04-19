@@ -122,6 +122,12 @@ export function sanitizeStringWithList(listGame) {
   return secureList
 }
 
+export function sanitizeStringWithParagraph(pGame) {
+  let secureP = DOMPurify.sanitize("<p>" + pGame + "</p>")
+  secureP = secureP.replace("<p>", "").replace("</p>", "")
+  return secureP
+}
+
 export function encode(str) {
   str = str.replace(/&/g, "&amp;");
   str = str.replace(/>/g, "&gt;");
