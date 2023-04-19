@@ -87,6 +87,28 @@ export async function fetchGetJson(URL) {
   }
 }
 
+export async function fetchGetImage(URL)  {
+  try {
+    const response = await fetch(URL);
+  
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+  
+    const buffer = await response.arrayBuffer();
+    const base64Image = btoa(String.fromCharCode.apply(null, new Uint8Array(buffer)));
+  
+    const imgElement = document.createElement('img');
+    imgElement.src = `data:image/png;base64,${base64Image}`;
+    
+    const imageContainer = document.getElementById('image-container');
+  imageContainer.appendChild(imgElement);
+   
+  } catch (error) {
+    console.error('There was a problem with the fetch operation:', error);
+  }
+}
+
 export function sanitizeStringWithTableRows(tableRows) {
   // @ts-ignore
   let secureRows = DOMPurify.sanitize("<table>" + tableRows + "</table>")
