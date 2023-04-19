@@ -1,29 +1,30 @@
-import {sanitizeStringWithParagraph} from "../../utils/utils.js"
+import { sanitizeStringWithParagraph } from "../../utils/utils.js";
 import { API_URL } from "../../utils/settings.js";
-import { fetchGetJson } from "../../utils/utils.js"
+import { fetchGetJson } from "../../utils/utils.js";
 
-  
-  export async function initHome(){
-    const spinner = document.getElementById("spinner");
-    const stringList = document.getElementById("string-list");
-    
-    spinner.style.display = "none";
+export async function initHome() {
+  const spinner = document.getElementById("spinner");
+  const stringList = document.getElementById("string-list");
 
-  document.getElementById("generate").addEventListener("click", async function (event) {
-    spinner.style.display = "block";
-    stringList.style.display = "none";
+  spinner.style.display = "none";
 
-    const game = await fetchGetJson(API_URL + "gameidea/create");
+  document
+    .getElementById("generate")
+    .addEventListener("click", async function (event) {
+      spinner.style.display = "block";
+      stringList.style.display = "none";
 
-    console.log(game)
+      const game = await fetchGetJson(API_URL + "gameidea/create");
+      
 
-    const listGame = 
-    `<hr><h2>${game.title}</h2>
+      console.log(game);
+      //Gameimage needs to be buffered into image
+      const listGame = `<hr><h2>${game.title}</h2>
     <p style="font-size: 0.8em;text-align: left;margin-left: 2em;margin-right: 2em;">
     <strong>Description:</strong> ${game.description} <br>
     <strong>Genre:</strong> ${game.genre} <br>
     <strong>You play as:</strong> ${game.player} <br>
-    <strong>Image:</strong> <a href="${game.image}" target="_blank"><img src="${game.image}"></a> 
+    <strong>Image:</strong> <div>${game.image}</div> 
     <p><a href="/gamedetails/${game.id}"><button class="btn-success">Game info</button></a></p>
     </p><br>`;
 
@@ -32,6 +33,5 @@ import { fetchGetJson } from "../../utils/utils.js"
 
       spinner.style.display = "none";
       stringList.style.display = "block";
-    
-  })
+    });
 }
