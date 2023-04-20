@@ -86,19 +86,6 @@ export async function fetchGetJson(URL) {
   }
 }
 
-export async function bufferImage(image) {
-  try {
-    if (!(image.constructor === Blob || image.constructor === File || image.constructor === Response)) {
-      throw new Error("Invalid image object");
-    }
-    const buffer = await image.arrayBuffer();
-    const base64Image = btoa(String.fromCharCode.apply(null, new Uint8Array(buffer)));
-  
-    return `data:image/png;base64,${base64Image}`;
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 
 export async function fetchGetImage(URL)  {
