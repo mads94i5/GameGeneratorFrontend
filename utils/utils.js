@@ -87,6 +87,20 @@ export async function fetchGetJson(URL) {
   }
 }
 
+export async function bufferImage(data, imgElement) {
+  try {
+
+    const buffer = await data.image.arrayBuffer();
+    const base64Image = btoa(String.fromCharCode.apply(null, new Uint8Array(buffer)));
+  
+    return base64Image;
+  } catch (error) {
+    if(error.fullResponse) {
+      console.error("Error: ", error.fullResponse)
+    }
+  }
+}
+
 export async function fetchGetImage(URL)  {
   try {
     const response = await fetch(URL);

@@ -1,9 +1,9 @@
 import { sanitizeStringWithParagraph } from "../../utils/utils.js";
 import { API_URL } from "../../utils/settings.js";
-import { fetchGetJson } from "../../utils/utils.js";
+import { fetchGetJson, bufferImage } from "../../utils/utils.js";
 
 export async function initHome() {
-  
+
   const spinner = document.getElementById("spinner");
   const stringList = document.getElementById("string-list");
 
@@ -16,7 +16,10 @@ export async function initHome() {
       stringList.style.display = "none";
 
       const game = await fetchGetJson(API_URL + "gameidea/create");
-      
+
+      const bufferedImage = bufferImage(game, )
+
+      imgElement.src = `data:image/png;base64,${base64Image}`;
 
       console.log(game);
       //Gameimage needs to be buffered into image ${game.image}
