@@ -1,4 +1,3 @@
-
   export async function handleHttpErrors(res) {
     if (!res.ok) {
       const errorResponse = await res.json();
@@ -87,19 +86,20 @@ export async function fetchGetJson(URL) {
   }
 }
 
-export function bufferImage(data) {
+export async function bufferImage(image) {
   try {
-
-    const buffer = data.image.arrayBuffer();
+    if (!(image.constructor === Blob || image.constructor === File || image.constructor === Response)) {
+      throw new Error("Invalid image object");
+    }
+    const buffer = await image.arrayBuffer();
     const base64Image = btoa(String.fromCharCode.apply(null, new Uint8Array(buffer)));
   
-    return base64Image;
+    return `data:image/png;base64,${base64Image}`;
   } catch (error) {
-    if(error.fullResponse) {
-      console.error("Error: ", error.fullResponse)
-    }
+    console.error(error);
   }
 }
+
 
 export async function fetchGetImage(URL)  {
   try {
@@ -116,7 +116,7 @@ export async function fetchGetImage(URL)  {
     imgElement.src = `data:image/png;base64,${base64Image}`;
     
     const imageContainer = document.getElementById('image-container');
-  imageContainer.appendChild(imgElement);
+    imageContainer.appendChild(imgElement);
    
   } catch (error) {
     console.error('There was a problem with the fetch operation:', error);

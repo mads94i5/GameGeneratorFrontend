@@ -17,7 +17,8 @@ export async function initHome() {
 
       await fetchGetJson(API_URL + "gameidea/create")
       .then(game => {
-        const bufferedImage = bufferImage(game)
+        const dataUrl = "data:image/png;base64," + game.image;
+        const bufferedImage = bufferImage(game.image)
         console.log(bufferedImage);
       
         const listGame = 
@@ -26,7 +27,7 @@ export async function initHome() {
         <strong>Description:</strong> ${game.description} <br>
         <strong>Genre:</strong> ${game.genre} <br>
         <strong>You play as:</strong> ${game.player} <br>
-        <strong>Image:</strong><img src="data:image/png;base64,${bufferedImage}"> 
+        <strong>Image:</strong><img src="${dataUrl}"> 
         <p><a href="/gamedetails/${game.id}"><button class="btn-success">Game info</button></a></p>
         </p><br>`; 
 
@@ -38,6 +39,8 @@ export async function initHome() {
       })
       .catch(error => {
         console.error(error);
+        spinner.style.display = "none";
+        stringList.style.display = "block";
       });
     })
   }
