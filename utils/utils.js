@@ -87,10 +87,10 @@ export async function fetchGetJson(URL) {
   }
 }
 
-export async function bufferImage(data, imgElement) {
+export function bufferImage(data) {
   try {
 
-    const buffer = await data.image.arrayBuffer();
+    const buffer = data.image.arrayBuffer();
     const base64Image = btoa(String.fromCharCode.apply(null, new Uint8Array(buffer)));
   
     return base64Image;
