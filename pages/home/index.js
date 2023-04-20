@@ -30,8 +30,8 @@ export async function initHome() {
     <strong>You play as:</strong> ${game.player} <br>
     <strong>Image:</strong> <div></div> 
     <p><a href="/gamedetails/${game.id}"><button class="btn-success">Game info</button></a></p>
-    </p><br>`;
-
+    </p><br>`; 
+       
       const okP = sanitizeStringWithParagraph(listGame);
       document.getElementById("string-list").innerHTML = okP;
 
