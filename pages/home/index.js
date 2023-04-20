@@ -6,11 +6,14 @@ export async function initHome() {
 
   const spinner = document.getElementById("spinner");
   const stringList = document.getElementById("string-list");
+  const generateButton = document.getElementById("generate");
 
   spinner.style.display = "none";
 
-  document.getElementById("generate").addEventListener("click", async function (event) {
-      spinner.style.display = "block";
+  generateButton.addEventListener("click", async function (event) {
+    generateButton.disabled = true;
+    generateButton.classList.remove("btn-success")
+    spinner.style.display = "block";
       stringList.style.display = "none";
 
       await fetchGetJson(API_URL + "gameidea/create")
@@ -24,7 +27,7 @@ export async function initHome() {
         <strong>Description:</strong> ${game.description} <br>
         <strong>Genre:</strong> ${game.genre} <br>
         <strong>You play as:</strong> ${game.player} <br>
-        <p><a href="/gamedetails/${game.id}"><button class="btn-success">Game info</button></a></p>
+        <p><a href="#/gamedetails/${game.id}"><button class="btn-success">Game info</button></a></p>
         </p><br>`; 
 
         const okP = sanitizeStringWithParagraph(listGame);
@@ -32,12 +35,16 @@ export async function initHome() {
 
         spinner.style.display = "none";
         stringList.style.display = "block";
+        generateButton.disabled = false;
+        generateButton.classList.add("btn-success")
       })
       .catch(error => {
         console.error(error);
-        document.getElementById("string-list").innerHTML = error;
+        document.getElementById("string-list").innerHTML = error + `<br>Failed to retrieve data from external APIs`;
         spinner.style.display = "none";
         stringList.style.display = "block";
+        generateButton.disabled = false;
+        generateButton.classList.add("btn-success")
       });
     })
   }
