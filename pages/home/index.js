@@ -18,8 +18,6 @@ export async function initHome() {
       await fetchGetJson(API_URL + "gameidea/create")
       .then(game => {
         const dataUrl = "data:image/png;base64," + game.image;
-        const bufferedImage = bufferImage(game.image)
-        console.log(bufferedImage);
       
         const listGame = 
         `<hr><h2>${game.title}</h2>
