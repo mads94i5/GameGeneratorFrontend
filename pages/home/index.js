@@ -2,14 +2,16 @@ import { sanitizeStringWithParagraph } from "../../utils/utils.js";
 import { API_URL } from "../../utils/settings.js";
 import { fetchGetJson } from "../../utils/utils.js";
 
-export async function initHome() {
+let isEventListenerAdded = false;
 
+export async function initHome() {
   const spinner = document.getElementById("spinner");
   const stringList = document.getElementById("string-list");
   const generateButton = document.getElementById("generate");
-
+  stringList.innerHTML = "";
   spinner.style.display = "none";
 
+  if (!isEventListenerAdded) {
   generateButton.addEventListener("click", async function (event) {
     generateButton.disabled = true;
     generateButton.classList.remove("btn-success")
@@ -31,7 +33,7 @@ export async function initHome() {
         </p><br>`; 
 
         const okP = sanitizeStringWithParagraph(listGame);
-        document.getElementById("string-list").innerHTML = okP;
+        stringList.innerHTML = okP;
 
         spinner.style.display = "none";
         stringList.style.display = "block";
@@ -40,11 +42,14 @@ export async function initHome() {
       })
       .catch(error => {
         console.error(error);
-        document.getElementById("string-list").innerHTML = error + `<br>Failed to retrieve data from external APIs`;
+        stringList.innerHTML = error + `<br>Failed to retrieve data from external APIs.`;
         spinner.style.display = "none";
         stringList.style.display = "block";
         generateButton.disabled = false;
         generateButton.classList.add("btn-success")
       });
     })
+    
+    isEventListenerAdded = true;
   }
+}
