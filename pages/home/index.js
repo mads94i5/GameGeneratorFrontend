@@ -25,8 +25,8 @@ import { fetchGetJson } from "../../utils/utils.js"
     <strong>You play as:</strong> ${game.player} <br>
     <strong>Image:</strong> <a href="${game.image}" target="_blank"><img src="${game.image}"></a> 
     <p><a href="/gamedetails/${game.id}"><button class="btn-success">Game info</button></a></p>
-    </p><br>`;
-
+    </p><br>`; 
+       
       const okP = sanitizeStringWithParagraph(listGame);
       document.getElementById("string-list").innerHTML = okP;
 
