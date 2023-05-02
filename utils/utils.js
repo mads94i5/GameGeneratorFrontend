@@ -69,7 +69,7 @@ export async function fetchPostJsonFormData(URL, form, event) {
     }
   }
   const addedData = await fetch(URL, options)
-   .then(handleJsonHttpErrors);
+   .then(handleHttpErrors);
    return addedData;
 }
 

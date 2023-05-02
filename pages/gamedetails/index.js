@@ -9,7 +9,7 @@ export async function initGameDetails(id){
     // Build primary game HTML
     let gameHtml = `
         <p style="font-size: 0.8em;text-align: left;margin-left: 2em;margin-right: 2em;">
-        Game is ${game.isGenerated ? "generated" : "created"} by <insert user></p>
+        Game is ${game.isGenerated ? "generated" : "created"} by ${game.user !== undefined ? game.user.username : "a super user"}</p>
         <h2>${game.title}</h2>
         <img src="${imageUrl}" style="width: 512px; height: 512px;"> 
         <p style="font-size: 0.8em;text-align: left;margin-left: 2em;margin-right: 2em;">
