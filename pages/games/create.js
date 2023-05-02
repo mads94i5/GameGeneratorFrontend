@@ -2,24 +2,38 @@ import { sanitizeStringWithParagraph } from "../../utils/utils.js";
 import { API_URL } from "../../utils/settings.js";
 import { fetchGetJson } from "../../utils/utils.js";
 
-let isEventListenerAdded = false;
+let isEventListenersAdded = false;
 
 export async function initCreateGame() {
-  const spinner = document.getElementById("spinner");
-  const stringList = document.getElementById("string-list");
-  const generateButton = document.getElementById("generate");
-  stringList.innerHTML = "";
-  spinner.style.display = "none";
+    const spinner = document.getElementById("spinner");
+    const stringList = document.getElementById("string-list");
+    const generateButton = document.getElementById("generate");
+    const createButton = document.getElementById("create");
+    stringList.innerHTML = "";
+    spinner.style.display = "none";
 
-  if (!isEventListenerAdded) {
-  generateButton.addEventListener("click", async function (event) {
-    event.preventDefault()
+    if (!isEventListenersAdded) {
+        generateButton.addEventListener("click", async function (event) {
+            event.preventDefault();
+            createGame("generated");
+        });
+        createButton.addEventListener("click", async function (event) {
+            event.preventDefault();
+            createGame("user");
+        });
+        isEventListenersAdded = true;
+    }
+}
+
+async function createGame(generatedOrUser) {
+    createButton.disabled = true;
+    createButton.classList.remove("btn-success")
     generateButton.disabled = true;
     generateButton.classList.remove("btn-success")
     spinner.style.display = "block";
       stringList.style.display = "none";
 
-      await fetchGetJson(API_URL + "gameidea/create")
+      await fetchGetJson(API_URL + `gameidea/create/${generatedOrUser}`)
       .then(game => {
         const dataUrl = "data:image/png;base64," + game.image;
       
@@ -46,11 +60,9 @@ export async function initCreateGame() {
         stringList.innerHTML = error + `<br>Failed to retrieve data from external APIs.`;
         spinner.style.display = "none";
         stringList.style.display = "block";
+        createButton.disabled = false;
+        createButton.classList.add("btn-success")
         generateButton.disabled = false;
         generateButton.classList.add("btn-success")
       });
-    })
-    
-    isEventListenerAdded = true;
-  }
-}
+    }
