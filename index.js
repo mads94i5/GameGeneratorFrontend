@@ -36,9 +36,9 @@ window.addEventListener("load", async () => {
         renderTemplate(templateIndex, "content")
         initHome()
       },
-      "/games": () => {
+      "/games": (match) => {
         renderTemplate(templateGames, "content")
-        initGames()
+        initGames(1, match)
       },
       "/gamedetails/:id": ({data}) => {
         renderTemplate(templateGameDetails, "content")
@@ -50,6 +50,7 @@ window.addEventListener("load", async () => {
     })
     .resolve()
 });
+
 
 
 window.onerror = function (errorMsg, url, lineNumber, column, errorObj) {

@@ -1,6 +1,6 @@
 import { sanitizeStringWithParagraph } from "../../utils/utils.js";
 import { API_URL } from "../../utils/settings.js";
-import { fetchGetJson, bufferImage } from "../../utils/utils.js";
+import { fetchGetJson} from "../../utils/utils.js";
 
 export async function initHome() {
 
@@ -41,4 +41,5 @@ export async function initHome() {
         stringList.style.display = "block";
       });
     })
+
   }
