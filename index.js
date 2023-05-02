@@ -32,7 +32,6 @@ window.addEventListener("load", async () => {
   router
     .hooks({
       before(done, match) {
-        console.log('Route change started');
         setActiveLink("menu", match.url)   
         InitHeader()    
         done()
