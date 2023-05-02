@@ -6,10 +6,13 @@ import {
   setActiveLink, adjustForMissingHash, renderTemplate, loadHtml
 } from "./utils/utils.js"
 
+import InitHeader from "./components/header/header.js"
+
 import { initGames } from "./pages/games/index.js"
 import { initCreateGame } from "./pages/games/create.js"
 import { initGameDetails } from "./pages/gamedetails/index.js"
 import { initHome } from "./pages/home/index.js";
+import { initLogin } from "./pages/login/login.js"
 
 window.addEventListener("load", async () => {
 
@@ -18,6 +21,7 @@ window.addEventListener("load", async () => {
   const templateCreateGame = await loadHtml("./pages/games/create.html")
   const templateGameDetails = await loadHtml("./pages/gamedetails/index.html")
   const templateNotFound = await loadHtml("./pages/notFound/notFound.html")
+  const templateLogin = await loadHtml("./pages/login/login.html")
 
   adjustForMissingHash()
 
@@ -28,9 +32,14 @@ window.addEventListener("load", async () => {
   router
     .hooks({
       before(done, match) {
-        setActiveLink("menu", match.url)
+        console.log('Route change started');
+        setActiveLink("menu", match.url)   
+        InitHeader()    
         done()
-      }
+      },
+      after(done, match) {
+        
+      }      
     })
     .on({
       //For very simple "templates", you can just insert your HTML directly like below
@@ -49,6 +58,10 @@ window.addEventListener("load", async () => {
       "/gamedetails/:id": ({data}) => {
         renderTemplate(templateGameDetails, "content")
         initGameDetails(data.id)
+      },
+      "/login": () => {
+        renderTemplate(templateLogin, "content")
+        initLogin()
       }
     })
     .notFound(() => {
