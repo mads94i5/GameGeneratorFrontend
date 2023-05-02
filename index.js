@@ -7,6 +7,7 @@ import {
 } from "./utils/utils.js"
 
 import { initGames } from "./pages/games/index.js"
+import { initCreateGame } from "./pages/games/create.js"
 import { initGameDetails } from "./pages/gamedetails/index.js"
 import { initHome } from "./pages/home/index.js";
 
@@ -14,6 +15,7 @@ window.addEventListener("load", async () => {
 
   const templateIndex = await loadHtml("./pages/home/index.html")
   const templateGames = await loadHtml("./pages/games/index.html")
+  const templateCreateGame = await loadHtml("./pages/games/create.html")
   const templateGameDetails = await loadHtml("./pages/gamedetails/index.html")
   const templateNotFound = await loadHtml("./pages/notFound/notFound.html")
 
@@ -39,6 +41,10 @@ window.addEventListener("load", async () => {
       "/games": () => {
         renderTemplate(templateGames, "content")
         initGames()
+      },
+      "/games/create": () => {
+        renderTemplate(templateCreateGame, "content")
+        initCreateGame()
       },
       "/gamedetails/:id": ({data}) => {
         renderTemplate(templateGameDetails, "content")
