@@ -10,21 +10,30 @@
   let sortField = "title";
   let sortOrder = "desc"
 
-  function handleSort(pageNo, match) {
+  function handleSort(headerText, pageNo, match) {
     sortOrder = sortOrder == "asc" ? "desc" : "asc";
-    sortField = "genre";
+    sortField = headerText;
     initGames(pageNo, match);
   }
 
 
   export async function initGames(pg, match) {
-    document.getElementById("header-genre").onclick = function (evt) {
+    
+    
+      document.getElementById("header-genre").onclick = function (evt) {
       evt.preventDefault()
-      handleSort(pageNo, match)
+      handleSort("genre", pageNo, match)
     }
 
+    document.getElementById("header-title").onclick = function (evt) {
+      evt.preventDefault()
+      handleSort("title", pageNo, match)
+    }
 
-     
+    document.getElementById("header-player").onclick = function (evt) {
+      evt.preventDefault()
+      handleSort("player", pageNo, match)
+    }
 
       const p = match?.params?._page || pg  //To support Navigo
       let pageNo = Number(p)
@@ -45,6 +54,11 @@
       const filterURL = API_URL + `gameidea/genre/${genre}`
       backendQuery = `?size=${SIZE}&page=${backendPage}&sort=${sortField},${sortOrder}&genre=${genre}`;
       fillTable(await fetchGetJson(filterURL + backendQuery));
+    }
+
+    document.getElementById("button-reset").onclick = async function (evt) {
+      evt.preventDefault();
+      initGames(pg, match)
     }
 
 
