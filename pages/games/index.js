@@ -19,21 +19,16 @@
 
   export async function initGames(pg, match) {
     
-    
-      document.getElementById("header-genre").onclick = function (evt) {
-      evt.preventDefault()
-      handleSort("genre", pageNo, match)
-    }
 
-    document.getElementById("header-title").onclick = function (evt) {
-      evt.preventDefault()
-      handleSort("title", pageNo, match)
-    }
-
-    document.getElementById("header-player").onclick = function (evt) {
-      evt.preventDefault()
-      handleSort("player", pageNo, match)
-    }
+    document.querySelector('.table').addEventListener('click', function (event) {
+      event.preventDefault();
+      const target = event.target;
+      if (target.tagName === 'a') {
+        // Handle click on link in table header
+        const headerId = target.id;
+        let sortField = headerId.replace('header-', '');
+        handleSort(sortField, pageNo, match);
+      }})
 
       const p = match?.params?._page || pg  //To support Navigo
       let pageNo = Number(p)
