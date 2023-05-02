@@ -7,25 +7,25 @@
                     <form id="create-form">
                         <div class="form-group">
                             <label for="title">Title</label>
-                            <input type="text" class="form-control" name="title" id="title" required aria-required="true" step="1" min="1" value="5">
+                            <input type="text" class="form-control" name="title" id="title" required aria-required="true">
                         </div>
                         <div class="form-group">
                             <label for="description">Description</label>
-                            <input type="text" class="form-control" name="description" id="description" required aria-required="true" step="1" min="1" value="5">
+                            <input type="text" class="form-control" name="description" id="description" required aria-required="true">
                         </div>
                         <div class="form-group">
                             <label for="genre">Genre</label>
-                            <input type="text" class="form-control" name="genre" id="genre" required aria-required="true" step="1" min="1" value="5">
+                            <input type="text" class="form-control" name="genre" id="genre" required aria-required="true">
                         </div>
                         <div class="form-group">
                             <label for="player">Player</label>
-                            <input type="text" class="form-control" name="player" id="player" required aria-required="true" step="1" min="1" value="5">
+                            <input type="text" class="form-control" name="player" id="player" required aria-required="true">
                         </div>
                         <div class="form-group">
-                            <label for="mechanics">Number of game mechanics</label>
-                            <input type="number" class="form-control" name="mechanics" id="mechanics" required aria-required="true" step="1" min="1" value="5">
+                            <label for="mechanics">Number of game mechanics (1-10)</label>
+                            <input type="number" class="form-control" name="mechanics" id="mechanics" required aria-required="true" step="1" min="1" aria-valuemin="1" value="1" max="10" aria-valuemax="10">
                         </div>
-                        <div id=""></div>
+                        <div id="mechanics-div"></div>
                         <button type="submit" class="btn-success" id="create" style="font-size: 1.4em;">Create</button>
                     </form>
                     <br>
@@ -35,8 +35,8 @@
                     <strong>Or generate a new game idea with AI:</strong> 
                     <form id="generate-form">
                         <div class="form-group">
-                            <label for="gen-mechanics">Number of game mechanics</label>
-                            <input type="number" class="form-control" name="gen-mechanics" id="gen-mechanics" required aria-required="true" step="1" min="1" value="5">
+                            <label for="gen-mechanics">Number of game mechanics (1-10)</label>
+                            <input type="number" class="form-control" name="gen-mechanics" id="gen-mechanics" required aria-required="true" step="1" min="1" aria-valuemin="1" value="5" max="10" aria-valuemax="10">
                         </div>
                         <button type="submit" class="btn-success" id="generate" style="font-size: 1.4em;">Generate</button>
                     </form>
@@ -44,7 +44,7 @@
             </div>
             <hr>
             <div style= "margin-top: 30px;" id="string-list"></div>
-            <div style= "position: fixed; top: 60%; left: 50%;" id="spinner" class="spinner-border" role="status">
+            <div id="spinner" class="spinner-border" role="status">
                 <span class="visually-hidden"></span>
             </div>
         </p>

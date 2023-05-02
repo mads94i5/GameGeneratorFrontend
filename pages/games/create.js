@@ -1,31 +1,64 @@
 import { sanitizeStringWithParagraph } from "../../utils/utils.js";
 import { API_URL } from "../../utils/settings.js";
-import { fetchGetJson } from "../../utils/utils.js";
+import { fetchPostJsonFormData } from "../../utils/utils.js";
 
 let isEventListenersAdded = false;
 
 export async function initCreateGame() {
+    clearMechanicInputs()
+    let mechanicsAmount = 1;
+    for (let i = 0; i < mechanicsAmount; i++) {
+        addMechanicInput(i);
+    }
     const spinner = document.getElementById("spinner");
     const stringList = document.getElementById("string-list");
-    const generateButton = document.getElementById("generate");
-    const createButton = document.getElementById("create");
+    const generateForm = document.getElementById("generate-form");
+    const createForm = document.getElementById("create-form");
+    const createMechanics = document.getElementById("mechanics")
+    const generateMechanics = document.getElementById("gen-mechanics")
+    
     stringList.innerHTML = "";
     spinner.style.display = "none";
 
     if (!isEventListenersAdded) {
-        generateButton.addEventListener("click", async function (event) {
+        generateForm.addEventListener("submit", async function (event) {
             event.preventDefault();
-            createGame("generated");
+            createGame("generated", generateForm, event);
         });
-        createButton.addEventListener("click", async function (event) {
+        createForm.addEventListener("submit", async function (event) {
             event.preventDefault();
-            createGame("user");
+            createGame("user", createForm, event);
         });
+        createMechanics.oninput = function() {
+            if (createMechanics.value < 1) {
+                createMechanics.value = 1
+            }
+            if (createMechanics.value > 10) {
+                createMechanics.value = 10
+            }
+            mechanicsAmount = createMechanics.value
+            clearMechanicInputs()
+            for (let i = 0; i < mechanicsAmount; i++) {
+                addMechanicInput(i);
+            }
+        }
+        generateMechanics.oninput = function() {
+            if (generateMechanics.value < 1) {
+                generateMechanics.value = 1
+            }
+            if (generateMechanics.value > 10) {
+                generateMechanics.value = 10
+            }
+        }
         isEventListenersAdded = true;
     }
 }
 
-async function createGame(generatedOrUser) {
+async function createGame(generatedOrUser, form, event) {
+    const spinner = document.getElementById("spinner");
+    const stringList = document.getElementById("string-list");
+    const generateButton = document.getElementById("generate");
+    const createButton = document.getElementById("create");
     createButton.disabled = true;
     createButton.classList.remove("btn-success")
     generateButton.disabled = true;
@@ -33,7 +66,7 @@ async function createGame(generatedOrUser) {
     spinner.style.display = "block";
       stringList.style.display = "none";
 
-      await fetchGetJson(API_URL + `gameidea/create/${generatedOrUser}`)
+      await fetchPostJsonFormData(API_URL + `gameidea/create/${generatedOrUser}`, form, event)
       .then(game => {
         const dataUrl = "data:image/png;base64," + game.image;
       
@@ -65,4 +98,17 @@ async function createGame(generatedOrUser) {
         generateButton.disabled = false;
         generateButton.classList.add("btn-success")
       });
+    }
+    function clearMechanicInputs() {
+        const manualMechanicsDiv = document.getElementById("mechanics-div");
+        manualMechanicsDiv.innerHTML = ""
+    }
+    function addMechanicInput(id) {
+        const input = `
+        <div class="form-group">
+            <label for="mechanic-${id}">Mechanic #${id+1}</label>
+            <input type="text" class="form-control" name="mechanic-${id}" id="mechanic-${id}" required aria-required="true">
+        </div>` 
+        const manualMechanicsDiv = document.getElementById("mechanics-div");
+        manualMechanicsDiv.innerHTML += sanitizeStringWithParagraph(input)
     }
