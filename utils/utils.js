@@ -137,3 +137,5 @@ export function encode(str) {
   str = str.replace(/'/g, "&#039;");
   return str;
 }
+
+
