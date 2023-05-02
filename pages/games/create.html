@@ -3,6 +3,7 @@
         <p style='margin-top:1em;font-size: 1em;color:black;'>
             <div class="row justify-content-center">
                 <div class="col-5 border" style="font-size: 0.6em">
+                    <br>
                     <strong>Fill out the form to create a new game idea:</strong>
                     <form id="create-form">
                         <div class="form-group">
@@ -11,7 +12,7 @@
                         </div>
                         <div class="form-group">
                             <label for="description">Description</label>
-                            <input type="text" class="form-control" name="description" id="description" required aria-required="true">
+                            <textarea type="text" class="form-control" name="description" id="description" rows="5" style="resize:none" required aria-required="true"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="genre">Genre</label>
@@ -32,6 +33,7 @@
                 </div>
                 <div class="col-1"></div>
                 <div class="col-5 border" style="font-size: 0.6em">
+                    <br>
                     <strong>Or generate a new game idea with AI:</strong> 
                     <form id="generate-form">
                         <div class="form-group">
