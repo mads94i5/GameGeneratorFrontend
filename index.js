@@ -36,10 +36,7 @@ window.addEventListener("load", async () => {
         setActiveLink("menu", match.url)   
         InitHeader()    
         done()
-      },
-      after(done, match) {
-        
-      }      
+      }
     })
     .on({
       //For very simple "templates", you can just insert your HTML directly like below

@@ -17,9 +17,8 @@ export default function InitHeader() {
 
             if (isAuthenticated()) {
                 removeToken();
-                window.router.navigate("/login");
-            } else {
-                window.router.navigate("/login");
             }
+
+            window.router.navigate("/login");
         });
 }
