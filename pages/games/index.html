@@ -3,9 +3,9 @@
     <h2><strong>Games</strong></h2><hr>
       Here is the full list of generated games: <br>
       <div class="input-group" style="width: 400px;">
-      <button class="btn-success btn-sm" id="button-filter" style="margin-right: 10px;">Filter by genre</button>
+      <button class="btn btn-success btn-sm" id="button-filter" style="margin-right: 10px;">Filter by genre</button>
       <input class="form-control form-control-sm" style="margin-right: 10px;" id="genre-filter" type="text">
-      <button class="btn-secondary btn-sm" id="button-reset">Reset</button>
+      <button class="btn btn-secondary btn-sm" id="button-reset">Reset</button>
     </div>
             <p style='margin-top:1em;font-size: 0.5em;color:black;'>
               <table class="table">
@@ -15,6 +15,7 @@
                     <th>Description</th>
                     <th><a id="header-genre" href="">Genre</a></th>
                     <th><a id="header-player" href="">Player</a></th>
+                    <th>Rating</th>
                     <th>More info</th>
                   </tr>
                 </thead>
@@ -22,7 +23,7 @@
               </table>
 
               <ul id="game-paginator" class="pagination justify-content-center" style="margin-top:10px;"></ul>
-              <button class="btn-success btn-sm"><a class="nav-link" href="#/games/create" data-navigo>Create game</a></button>
+              <button class="btn btn-success btn-sm"><a class="nav-link" href="#/games/create" data-navigo>Create game</a></button>
               <p id="error" style="color:red"></p>
             </p>
         </div>
