@@ -1,6 +1,6 @@
   import { API_URL } from "../../utils/settings.js"
   import { fetchGetJson } from "../../utils/utils.js"
-  const URL = API_URL + "gameidea/get-all"
+  const URL = API_URL + "gameidea/public/get-all"
   import { paginator } from "../../lib/pagination/paginate-bootstrap.js"
   const SIZE = 10
   /* const TOTAL = Math.ceil(1000 / SIZE) */
@@ -22,7 +22,7 @@
   export async function initGames(pg, match) {
     
     if (!initialized) {
-    document.querySelector('.table').addEventListener('click', function (event) {
+    document.querySelector('.table-header').addEventListener('click', function (event) {
       event.preventDefault();
       const target = event.target;
       if (target.tagName === 'A') {
@@ -50,7 +50,7 @@
     document.getElementById("button-filter").onclick = async function (evt) {
       evt.preventDefault();
       let genre = document.getElementById("genre-filter").value;
-      const filterURL = API_URL + `gameidea/genre/${genre}`
+      const filterURL = API_URL + `gameidea/public/genre/${genre}`
       backendQuery = `?size=${SIZE}&page=${backendPage}&sort=${sortField},${sortOrder}&genre=${genre}`;
       fillTable(await fetchGetJson(filterURL + backendQuery));
     }
@@ -79,7 +79,7 @@
     async function getCount(){
       var count = 0;
       try {
-        count = await fetch(`${API_URL}gameidea/count`)
+        count = await fetch(`${API_URL}gameidea/public/count`)
           .then(res => res.json())
       } catch (e) {
         console.error(e)
@@ -95,7 +95,7 @@
         <td>${game.description.slice(0, 50)}${game.description.length > 50 ? '...' : ''}</td>
         <td>${game.genre}</td>
         <td>${game.player}</td>
-        <td><a href="#/gamedetails/${game.id}"><button class="btn-success">Game info</button></a></td>
+        <td><a href="#/gamedetails/${game.id}" class="btn-sm btn-success">Game info</a></td>
       </tr>
     `);
     tbody.innerHTML = rows.join("");

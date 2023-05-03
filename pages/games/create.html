@@ -22,10 +22,6 @@
                             <label for="player">Player</label>
                             <input type="text" class="form-control" name="player" id="player" required aria-required="true">
                         </div>
-                        <div class="form-group">
-                            <label for="mechanics">Number of game mechanics (1-10)</label>
-                            <input type="number" class="form-control" name="mechanics" id="mechanics" required aria-required="true" step="1" min="1" aria-valuemin="1" value="1" max="10" aria-valuemax="10">
-                        </div>
                         <div id="mechanics-div"></div>
                         <button type="submit" class="btn-success" id="create" style="font-size: 1.4em;">Create</button>
                     </form>
@@ -34,12 +30,8 @@
                 <div class="col-1"></div>
                 <div class="col-5 border" style="font-size: 0.6em">
                     <br>
-                    <strong>Or generate a new game idea with AI:</strong> 
+                    <strong>Or generate a new game idea with AI:</strong><br><br>
                     <form id="generate-form">
-                        <div class="form-group">
-                            <label for="gen-mechanics">Number of game mechanics (1-10)</label>
-                            <input type="number" class="form-control" name="gen-mechanics" id="gen-mechanics" required aria-required="true" step="1" min="1" aria-valuemin="1" value="5" max="10" aria-valuemax="10">
-                        </div>
                         <button type="submit" class="btn-success" id="generate" style="font-size: 1.4em;">Generate</button>
                     </form>
                 </div>

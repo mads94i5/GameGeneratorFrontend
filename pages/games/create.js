@@ -5,17 +5,10 @@ import { fetchPostJsonFormData } from "../../utils/utils.js";
 let isEventListenersAdded = false;
 
 export async function initCreateGame() {
-    clearMechanicInputs()
-    let mechanicsAmount = 1;
-    for (let i = 0; i < mechanicsAmount; i++) {
-        addMechanicInput(i);
-    }
     const spinner = document.getElementById("spinner");
     const stringList = document.getElementById("string-list");
     const generateForm = document.getElementById("generate-form");
     const createForm = document.getElementById("create-form");
-    const createMechanics = document.getElementById("mechanics")
-    const generateMechanics = document.getElementById("gen-mechanics")
     
     stringList.innerHTML = "";
     spinner.style.display = "none";
@@ -29,27 +22,6 @@ export async function initCreateGame() {
             event.preventDefault();
             createGame("user", createForm, event);
         });
-        createMechanics.oninput = function() {
-            if (createMechanics.value < 1) {
-                createMechanics.value = 1
-            }
-            if (createMechanics.value > 10) {
-                createMechanics.value = 10
-            }
-            mechanicsAmount = createMechanics.value
-            clearMechanicInputs()
-            for (let i = 0; i < mechanicsAmount; i++) {
-                addMechanicInput(i);
-            }
-        }
-        generateMechanics.oninput = function() {
-            if (generateMechanics.value < 1) {
-                generateMechanics.value = 1
-            }
-            if (generateMechanics.value > 10) {
-                generateMechanics.value = 10
-            }
-        }
         isEventListenersAdded = true;
     }
 }
@@ -91,7 +63,7 @@ async function createGame(generatedOrUser, form, event) {
       })
       .catch(error => {
         console.error(error);
-        stringList.innerHTML = error + `<br>Failed to retrieve data from external APIs.`;
+        stringList.innerHTML = error;
         spinner.style.display = "none";
         stringList.style.display = "block";
         createButton.disabled = false;
@@ -99,17 +71,4 @@ async function createGame(generatedOrUser, form, event) {
         generateButton.disabled = false;
         generateButton.classList.add("btn-success")
       });
-    }
-    function clearMechanicInputs() {
-        const manualMechanicsDiv = document.getElementById("mechanics-div");
-        manualMechanicsDiv.innerHTML = ""
-    }
-    function addMechanicInput(id) {
-        const input = `
-        <div class="form-group">
-            <label for="mechanic-${id}">Mechanic #${id+1}</label>
-            <input type="text" class="form-control" name="mechanic-${id}" id="mechanic-${id}" required aria-required="true">
-        </div>` 
-        const manualMechanicsDiv = document.getElementById("mechanics-div");
-        manualMechanicsDiv.innerHTML += sanitizeStringWithParagraph(input)
     }
