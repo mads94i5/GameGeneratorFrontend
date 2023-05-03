@@ -95,7 +95,8 @@
         <td>${game.description.slice(0, 50)}${game.description.length > 50 ? '...' : ''}</td>
         <td>${game.genre}</td>
         <td>${game.player}</td>
-        <td><a href="#/gamedetails/${game.id}" class="btn-sm btn-success">Game info</a></td>
+        <td>${Math.floor(game.totalRatingInPercent)}%</td>
+        <td><a href="#/gamedetails/${game.id}" class="btn btn-sm btn-success">Game info</a></td>
       </tr>
     `);
     tbody.innerHTML = rows.join("");

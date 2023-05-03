@@ -1,5 +1,56 @@
-<div class="template" style="font-family:Verdana, Geneva, Tahoma, sans-serif;margin-top:1em;font-size: 1.5em;color:black;">
-    <h2><strong>Game details</strong></h2><hr>
-            <div id="string-list"></div>
-            <a href="#/games"><button class="btn-success">Back</button></a>
+<div class="template"
+    style="font-family:Verdana, Geneva, Tahoma, sans-serif;margin-top:1em;font-size: 1.5em;color:black;">
+    <h2><strong>Game details</strong></h2>
+    <hr>
+    <div id="string-list"></div>
+    <div class="star-wrapper mb-5">
+        <h2>Add Rating</h2>
+        <div class="star-container flex">
+            <i class="fa-solid fa-star fa-beat"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
         </div>
+        <style>
+            .fa-star {
+                cursor: pointer;
+                color: #000;
+            }
+
+            /*
+             * Reverse the order of the star container's children.
+             */
+            .star-container {
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: center;
+            }
+            
+            /*
+             * If the cursor is over the second star, highlight both first and second star from right to left.
+             */
+            .fa-star:hover~.fa-star,
+            .fa-star:hover {
+                color: #f8ce0b;
+            }
+
+            /*
+             * disabled hover and cursor if star container has class "rated"
+             */
+            .star-container.rated .fa-star:hover~.fa-star,
+            .star-container.rated .fa-star:hover {
+                color: #000;
+                cursor: initial;
+            }
+
+            .fa-star.checked,
+            .star-container.rated .fa-star:hover~.fa-star.checked,
+            .star-container.rated .fa-star.checked:hover {
+                color: #f8ce0b;
+            }
+        </style>
+    </div>
+
+    <a href="#/games"><button class="btn btn-success">Back</button></a>
+</div>

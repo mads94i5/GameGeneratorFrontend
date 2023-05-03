@@ -3,6 +3,59 @@ import { fetchGetJson } from "../../utils/utils.js"
 import { sanitizeStringWithParagraph } from "../../utils/utils.js"
 
 
+function createRating(rating) {
+    return fetch(API_URL + "game-ratings", {
+        method: "POST",
+        body: JSON.stringify(rating),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });    
+}
+
+function onStarsClick(i, id) {
+    if (hasRated) {
+        console.log("You have already rated this game idea!");
+        return;
+    }
+
+    const score = 5 - i;
+    const rating = {
+        gameIdeaId: id,
+        score,
+    };
+
+    console.log("You clicked on star " + score);
+
+    createRating(rating)
+        .then((res) => res.json())
+        .then((data) => {
+            if (data) {
+                document.getElementById("rating").innerHTML = `${Math.floor(data.totalScoreInPercent)}%`;
+                document.querySelector(".star-container").classList.add("rated");
+                colorStarsBasedOnRating(score);
+                hasRated = true;
+            }
+            else {
+                alert("Something went wrong!");
+            }
+        })
+        .catch((err) => {
+            alert(err);
+        });
+}
+
+function colorStarsBasedOnRating(rating) {
+    const stars = document.querySelectorAll(".fa-star");
+    // Color stars based on rating
+    for (let i = 0; i < rating; i++) {
+        const index = 4 - i;
+        stars[index].classList.add("checked");
+    }
+}
+
+let hasRated = false;
+
 export async function initGameDetails(id){
     const game = await fetchGetJson(API_URL + `gameidea/public/get/${id}`);
     const imageUrl = "data:image/png;base64," + game.image;
@@ -16,6 +69,7 @@ export async function initGameDetails(id){
         <strong>Description:</strong> ${game.description} <br>
         <strong>Genre:</strong> ${game.genre} <br>
         <strong>You play as:</strong> ${game.player} <br>
+        <strong>Rating:</strong> <span id="rating">${Math.floor(game.totalRatingInPercent)}%</span><br>
         </p><br>`;
 
     // Build similar games HTML
@@ -36,4 +90,28 @@ export async function initGameDetails(id){
 
     const okList = sanitizeStringWithParagraph(gameHtml);
     document.getElementById("string-list").innerHTML = okList;
+    
+    /**
+     * Rating methods
+     */
+    document.querySelector(".star-container").classList.remove("rated");
+    document.querySelectorAll(".fa-star").forEach((star) => {
+        star.classList.remove("checked");
+    });
+    hasRated = false;
+    // Get all stars
+    const stars = document.querySelectorAll(".fa-star");
+    // Add event listener to each star and increase rating by 1 for each star
+    for (let i = 0; i < stars.length; i++) {
+        if (!hasRated) {
+            // Note: because we override the onclick function, instead
+            // of using the addEventListener method, we avoid having
+            // multiple event listeners on the same element.
+            //
+            // Why not use addEventListener? Because we want to be able
+            // to update the id being passed to the onStarsClick function,
+            // when showing another game idea.
+            stars[i].onclick = () => onStarsClick(i, id);
+        }
+    }
 }
