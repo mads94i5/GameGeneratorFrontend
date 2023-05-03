@@ -5,6 +5,8 @@
   const SIZE = 10
   /* const TOTAL = Math.ceil(1000 / SIZE) */
 
+  let initialized = false
+
   const navigoRoute = "games"
 
   let sortField = "title";
@@ -19,16 +21,18 @@
 
   export async function initGames(pg, match) {
     
-
+    if (!initialized) {
     document.querySelector('.table').addEventListener('click', function (event) {
       event.preventDefault();
       const target = event.target;
-      if (target.tagName === 'a') {
+      if (target.tagName === 'A') {
         // Handle click on link in table header
         const headerId = target.id;
         let sortField = headerId.replace('header-', '');
         handleSort(sortField, pageNo, match);
       }})
+      initialized = true
+    }
 
       const p = match?.params?._page || pg  //To support Navigo
       let pageNo = Number(p)
