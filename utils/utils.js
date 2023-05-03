@@ -54,7 +54,7 @@ export function setActiveLink(topnav, activeUrl) {
   })
 }
 
-export async function fetchPostJsonFormData(URL, form, event) {
+export async function fetchPostJsonFormData(URL, form, event, token = null) {
   let formElement = /** @type {HTMLFormElement} */ (form);
   event.preventDefault();
   const formData = new FormData(formElement);
@@ -67,6 +67,9 @@ export async function fetchPostJsonFormData(URL, form, event) {
     headers: {
       'Content-Type': 'application/json'
     }
+  }
+  if (token) {
+    options.headers.Authorization = `Bearer ${token}`;
   }
   const addedData = await fetch(URL, options)
    .then(handleHttpErrors);

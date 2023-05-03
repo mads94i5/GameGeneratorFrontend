@@ -55,6 +55,7 @@ export async function initCreateGame() {
 }
 
 async function createGame(generatedOrUser, form, event) {
+    const token = localStorage.getItem("jwtToken")
     const spinner = document.getElementById("spinner");
     const stringList = document.getElementById("string-list");
     const generateButton = document.getElementById("generate");
@@ -66,7 +67,7 @@ async function createGame(generatedOrUser, form, event) {
     spinner.style.display = "block";
       stringList.style.display = "none";
 
-      await fetchPostJsonFormData(API_URL + `gameidea/create/${generatedOrUser}`, form, event)
+      await fetchPostJsonFormData(API_URL + `gameidea/create/${generatedOrUser}`, form, event, token)
       .then(game => {
         const dataUrl = "data:image/png;base64," + game.image;
       
