@@ -71,12 +71,12 @@ export async function initGameDetails(id){
         <strong>You play as:</strong> ${game.player} <br>
         <strong>Rating:</strong> <span id="rating">${Math.floor(game.totalRatingInPercent)}%</span><br>
         </p><br>`;
-
+    let similarGamesHtml
     // Build similar games HTML
     if (game.similarGames && game.similarGames.length > 0) {
-        gameHtml += `<hr><h2><strong>Similar games:</strong></h2><hr><ul>`;
+        similarGamesHtml += `<hr><h2><strong>Similar games:</strong></h2><hr><ul>`;
         for (let i = 0; i < game.similarGames.length; i++) {
-            gameHtml += `
+            similarGamesHtml += `
                 <h2>${game.similarGames[i].title}</h2>
                 <a href="${game.similarGames[i].image}" target="_blank"><img src="${game.similarGames[i].image}" style="width: 460px; height: 215px;"></a> <br>
                 <p style="font-size: 0.8em;text-align: left;">
@@ -88,8 +88,10 @@ export async function initGameDetails(id){
         }
     }
 
-    const okList = sanitizeStringWithParagraph(gameHtml);
-    document.getElementById("string-list").innerHTML = okList;
+    const okGame = sanitizeStringWithParagraph(gameHtml);
+    const okSimilarGames = sanitizeStringWithParagraph(similarGamesHtml);
+    document.getElementById("game-idea").innerHTML = okGame;
+    document.getElementById("similar-games").innerHTML = okSimilarGames;
     
     /**
      * Rating methods
