@@ -1,5 +1,5 @@
 import { isAuthenticated, removeToken } from "../../utils/auth.js"
-import { getCredits } from "../../utils/credit.js";
+import { getCredits, removeCredits } from "../../utils/credit.js";
 
 function createLink(href, text) {
     const link = document.createElement("a");
@@ -35,6 +35,7 @@ export default function InitHeader() {
 
             if (isAuthenticated()) {
                 removeToken();
+                removeCredits();
             }
 
             window.router.navigate("/login");
