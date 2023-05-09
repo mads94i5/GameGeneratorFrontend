@@ -59,6 +59,8 @@ async function createGame(generatedOrUser, form, event) {
 
       spinner.style.display = "none";
       stringList.style.display = "block";
+      createButton.disabled = false;
+      createButton.classList.add("btn-success")
       generateButton.disabled = false;
       generateButton.classList.add("btn-success")
     })

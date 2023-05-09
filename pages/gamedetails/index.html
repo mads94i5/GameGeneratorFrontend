@@ -49,7 +49,34 @@
             }
         </style>
     </div>
+    <div class="row justify-content-center">
+        <hr><h2><strong>Generate game code:</strong></h2><hr>
+        <div class="col-3">
+            <form id="generate-form">
+                <div class="form-group">
+                    <select name="language" class="form-select">
+                        <option value="java">Java</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="c#">C#</option>
+                        <option value="c++">C++</option>
+                        <option value="python">Python</option>
+                    </select>
+                </div>
+                <input type="hidden" name="gameIdeaId" id="gameIdeaId">
+                <button type="submit" class="btn btn-success" id="generate">Generate</button>
+            </form>
+        </div>
+    </div>
+    <br>
+    <div id="spinner" class="spinner-border mx-auto" role="status">
+        <span class="visually-hidden"></span>
+        <!-- Generating code for a game may take a few minutes. Please wait.. -->
+    </div>
+    <div id="errorDiv"></div>
+    <div id="generated-code"></div>
     <div id="similar-games"></div>
-
+    <p style="font-size: 0.8em;text-align: center;">
+    <br><hr>
     <a href="#/games"><button class="btn btn-success">Back</button></a>
+    </p>
 </div>
