@@ -11,6 +11,8 @@
     border: 1px solid;
     background: linear-gradient(to bottom, #ffffff 0%, #e6e6e6 100%);
     box-shadow: 0 0 10px 5px #cccccc;
+    width: 65px;
+    height: 65px;
 }
 
 #credits.success span {
