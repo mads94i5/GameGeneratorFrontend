@@ -83,7 +83,6 @@ export async function initGames(pg, match) {
   }
 
 
-
           // (C1-2) REDRAW PAGINATION
   paginator({
     target: document.getElementById("game-paginator"),
