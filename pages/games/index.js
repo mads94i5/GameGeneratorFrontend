@@ -8,6 +8,8 @@ const SIZE = 10
 let initialized = false;
 let filterData = false;
 
+let TOTAL = 0;
+
 const navigoRoute = "games";
 
 let games = [];
@@ -61,11 +63,13 @@ export async function initGames(pg, match) {
     backendQuery = `?size=${SIZE}&page=${backendPage}&sort=${sortField},${sortOrder}`
 
     games = await fetchGetJson(URL + "get-all" + backendQuery);
+    TOTAL = Math.ceil(await getCount() / SIZE);
   }
   else{
     queryString = `?size=${SIZE}&page=${pageNo}&sort=${sortField},${sortOrder}&genre=${genre}`
     backendQuery = `?size=${SIZE}&page=${backendPage}&sort=${sortField},${sortOrder}&genre=${genre}`;
     games = await fetchGetJson(URL + `genre/${genre}` + backendQuery);
+    TOTAL = Math.ceil(await getCountByGenre(genre) / SIZE);
   }
 
 
@@ -79,7 +83,6 @@ export async function initGames(pg, match) {
   }
 
 
-    const TOTAL = Math.ceil(await getCount() / SIZE);
 
           // (C1-2) REDRAW PAGINATION
   paginator({
@@ -104,6 +107,19 @@ export async function initGames(pg, match) {
     }
     return count;
   }
+
+  async function getCountByGenre(genre){
+    var count = 0;
+    try {
+      count = await fetch(`${API_URL}gameidea/public/count/genre/${genre}`)
+        .then(res => res.json())
+    } catch (e) {
+      console.error(e)
+    }
+    return count;
+
+
+  }
   
   function fillTable(games){
     const tbody = document.getElementById("table-rows");
@@ -120,47 +136,4 @@ export async function initGames(pg, match) {
   tbody.innerHTML = rows.join("");
   }
 
-  /* async function updateData() {
-const TOTAL = Math.ceil(await getCount() / SIZE);
-TOTAL = Math.ceil(TOTAL_RECORDS / SIZE) === 0 ? 1 : Math.ceil(TOTAL_RECORDS / SIZE);
-examples = await load(PAGE);
-let rows = generateTableRows(examples);
-document.getElementById("tbody").innerHTML = sanitizeStringWithTableRows(rows)
-setupModalEventHandlers(examples);
-
-paginator({
-  target: document.getElementById("paginator"),
-  total: TOTAL,
-  current: PAGE,
-  click: initExamples
-});
-if (queryString !== undefined) {
-  //Update URL to allow for COPY AND PASTE when used with the Navigo Router (callHandler: false ensures the handler will not be called twice)
-  window.router?.navigate(`/example${queryString}`, { callHandler: false, updateBrowserURL: true })
-}
-}
-
-async function load(PAGE) {
-  let token = localStorage.getItem("token")
-  let backendPage = PAGE - 1
-  queryString = `?size=${SIZE}&page=${PAGE}&sort=${SORTBY},${SORTORDER}`;
-  let backendQuery = `?size=${SIZE}&page=${backendPage}&sort=${SORTBY},${SORTORDER}`;
-
-  const filterOption = document.getElementById("filter-option").value;
-  if (filterText !== undefined && filterText !== "") {
-    switch(filterOption) {
-      case "string":
-        backendQuery += `&stringValue=${filterText}`;
-        return await fetchGetJson(`${API_URL}anonymous/example/page/string/${filterText}${backendQuery}`, token);
-      case "integer":
-        backendQuery += `&integerValue=${filterText}`;
-        return await fetchGetJson(`${API_URL}anonymous/example/page/integer/${filterText}${backendQuery}`, token);
-      case "double":
-        backendQuery += `&doubleValue=${filterText}`;
-        return await fetchGetJson(`${API_URL}anonymous/example/page/double/${filterText}${backendQuery}`, token);
-      default:
-        return null
-    }
-  }
-  return await fetchGetJson(`${API_URL}anonymous/example/page${backendQuery}`, token);
-} */
+  
