@@ -1,5 +1,6 @@
 import { API_URL } from "../../utils/settings.js";
 import { setToken, isExpired } from "../../utils/auth.js";
+import { refreshCredits } from "../../utils/credit.js";
 
 let initialized = false;
 
@@ -31,6 +32,7 @@ export async function initLogin() {
                             window.router.navigate("/");
                             e.target.querySelector("input[type='text']").value = "";
                             e.target.querySelector("input[type='password']").value = "";
+                            refreshCredits();
                         }
                         else {
                             alert("Invalid username or password!");
