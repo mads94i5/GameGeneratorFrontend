@@ -116,7 +116,7 @@ async function generateCode(id, form, event) {
             const zipFileData = gameCodes[i].zipFile;
             const blobData = new Blob([zipFileData], { type: "application/zip" });
 
-            const url = window.URL.createObjectURL(zipBlob);
+            const url = window.URL.createObjectURL(blobData);
             console.log(zipFileData)
             console.log(blobData)
             console.log(url)
