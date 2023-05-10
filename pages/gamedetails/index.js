@@ -155,7 +155,6 @@ async function generateCode(id, form, event) {
             downloadFile(url, fileName);
         });
     });
-
   }
 
   async function fillSimilarGamesData(id) {
