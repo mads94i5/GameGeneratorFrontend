@@ -84,62 +84,58 @@ async function generateCode(id, form, event) {
     return game;
   }
 
-  async function fillGeneratedGameCodeData(id) {
+async function fillGeneratedGameCodeData(id) {
     const game = await fetchGetJson(API_URL + `gameidea/public/get/${id}`);
     const gameCodes = await fetchGetJson(API_URL + `gamecode/public/get/${id}`);
     let gameCodeHtml = ''
-    
     // Build game code HTML
     if (gameCodes && gameCodes.length > 0) {
         gameCodeHtml += `<hr><h2><strong>Generated game code:</strong></h2><hr>`;
         for (let i = 0; i < gameCodes.length; i++) {
             const fileName = `${game.title}_${gameCodes[i].codeLanguage.language}`.replace(/#/g, "sharp").replace(/\+/g, "plus").replace(/[^\w\s]/gi, '').replace(/ /g, '_');
-            const zipFileData = gameCodes[i].zipFile;
-            const blobData = new Blob([zipFileData], { type: "application/zip" });
+            const zipFileData = btoa(gameCodes[i].zipFile);
+            const fileData = new File([zipFileData], { type: "application/zip" });
 
-            const url = window.URL.createObjectURL(blobData);
+            const url = window.URL.createObjectURL(fileData);
             console.log(zipFileData)
-            console.log(blobData)
+            console.log(fileData)
             console.log(url)
             gameCodeHtml += `
               <p style="font-size: 0.8em;text-align: center;">
               <strong>${gameCodes[i].codeLanguage.language.charAt(0).toUpperCase() + gameCodes[i].codeLanguage.language.slice(1)}:</strong><br>
               <a href="${url}" download="${fileName}.zip" class="btn btn-success download-link">Download ${fileName}.zip</a><br>
               </p>`;
-
         }
     }
-
     const okGeneratedCode = sanitizeStringWithParagraph(gameCodeHtml);
     document.getElementById("generated-code").innerHTML = okGeneratedCode;
 
- // Function for handling download.
- // Url for the file to be downloaded is put in as well as the name the file should be saved to.
- function downloadFile(url, fileName) {
-    try {
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = fileName;
-        link.click();
-    } catch (error) {
-        console.error("Error in download:", error);
+    // Function for handling download.
+    // Url for the file to be downloaded is put in as well as the name the file should be saved to.
+    function downloadFile(url, fileName) {
+        try {
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = fileName;
+            link.click();
+        } catch (error) {
+            console.error("Error in download:", error);
+        }
     }
-}
-//Eventlistener to activate downloadFile by click
+    //Eventlistener to activate downloadFile by click
     const downloadLinks = document.querySelectorAll(".download-link");
     downloadLinks.forEach(link => {
         link.addEventListener("click", (event) => {
             event.preventDefault();
             const url = link.href;
-//Below the download attribute value of the clicked link using link.getAttribute("download") which contains the filename
+            //Below the download attribute value of the clicked link using link.getAttribute("download") which contains the filename
             const fileName = link.getAttribute("download");
             downloadFile(url, fileName);
         });
     });
+}
 
-  }
-
-  async function fillSimilarGamesData(id) {
+async function fillSimilarGamesData(id) {
     const game = await fetchGetJson(API_URL + `gameidea/public/get/${id}`);
     let similarGamesHtml = ''
     // Build similar games HTML
@@ -147,18 +143,16 @@ async function generateCode(id, form, event) {
         similarGamesHtml += `<hr><h2><strong>Similar games:</strong></h2><hr><ul>`;
         for (let i = 0; i < game.similarGames.length; i++) {
             similarGamesHtml += `
-                <h2>${game.similarGames[i].title}</h2>
-                <a href="${game.similarGames[i].image}" target="_blank"><img src="${game.similarGames[i].image}" style="width: 460px; height: 215px;"></a> <br>
-                <p style="font-size: 0.8em;text-align: left;">
-                <strong>Description:</strong> ${game.similarGames[i].description} <br>
-                <strong>Genre:</strong> ${game.similarGames[i].genre} <br>
-                <strong>You play as:</strong> ${game.similarGames[i].player} <br>
-                <strong>Link:</strong> <a href="${game.similarGames[i].link}" target="_blank">${game.similarGames[i].link}</a> <br>
-                </p><hr>`;
+            <h2>${game.similarGames[i].title}</h2>
+            <a href="${game.similarGames[i].image}" target="_blank"><img src="${game.similarGames[i].image}" style="width: 460px; height: 215px;"></a> <br>
+            <p style="font-size: 0.8em;text-align: left;">
+            <strong>Description:</strong> ${game.similarGames[i].description} <br>
+            <strong>Genre:</strong> ${game.similarGames[i].genre} <br>
+            <strong>You play as:</strong> ${game.similarGames[i].player} <br>
+            <strong>Link:</strong> <a href="${game.similarGames[i].link}" target="_blank">${game.similarGames[i].link}</a> <br>
+            </p><hr>`;
         }
     }
-    
     const okSimilarGames = sanitizeStringWithParagraph(similarGamesHtml);
     document.getElementById("similar-games").innerHTML = okSimilarGames;
-  }
-  
+}
