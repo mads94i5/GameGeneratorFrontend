@@ -45,7 +45,7 @@ async function createGame(generatedOrUser, form, event) {
       const dataUrl = "data:image/png;base64," + game.image;
     
       const listGame = 
-      `<hr><h2>${game.title}</h2>
+      `<h2>${game.title}</h2>
       <img src="${dataUrl}" style="width: 512px; height: 512px;"> 
       <p style="font-size: 0.8em;text-align: left;margin-left: 2em;margin-right: 2em;">
       <strong>Description:</strong> ${game.description} <br>
