@@ -2,10 +2,19 @@ import { sanitizeStringWithParagraph } from "../../utils/utils.js";
 import { API_URL } from "../../utils/settings.js";
 import { fetchPostJsonFormData } from "../../utils/utils.js";
 import { refreshCredits, hasAnyCredits } from "../../utils/credit.js";
+import { isAuthenticated } from "../../utils/auth.js";
+import { initCategories } from "./create_categories.js";
 
 let isEventListenersAdded = false;
 
 export async function initCreateGame() {
+    // Show the unauthenticated message if the user is not authenticated
+    document.getElementById("generator-unauthenticated").style.display = isAuthenticated() ? "none" : "block";
+    // Or show the generator if the user is authenticated
+    document.getElementById("generator-wrapper").style.display = isAuthenticated() ? "block" : "none";    
+    // Setup categories
+    initCategories();
+
     const spinner = document.getElementById("spinner");
     const stringList = document.getElementById("created-game");
     const generateForm = document.getElementById("generate-form");
