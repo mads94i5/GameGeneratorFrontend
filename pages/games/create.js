@@ -1,6 +1,7 @@
 import { sanitizeStringWithParagraph } from "../../utils/utils.js";
 import { API_URL } from "../../utils/settings.js";
 import { fetchPostJsonFormData } from "../../utils/utils.js";
+import { refreshCredits, hasAnyCredits } from "../../utils/credit.js";
 
 let isEventListenersAdded = false;
 
@@ -27,6 +28,11 @@ export async function initCreateGame() {
 }
 
 async function createGame(generatedOrUser, form, event) {
+  if (!hasAnyCredits()) {
+    alert("You don't have any credits left. Please buy more credits.");
+    return;
+  }
+
   const token = localStorage.getItem("jwtToken")
   
   const spinner = document.getElementById("spinner");
@@ -63,6 +69,8 @@ async function createGame(generatedOrUser, form, event) {
       createButton.classList.add("btn-success")
       generateButton.disabled = false;
       generateButton.classList.add("btn-success")
+
+      refreshCredits();
     })
     .catch(error => {
       console.error(error);
