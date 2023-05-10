@@ -116,20 +116,46 @@ async function generateCode(id, form, event) {
             const zipFileData = gameCodes[i].zipFile;
             const blobData = new Blob([zipFileData], { type: "application/zip" });
 
-            const url = window.URL.createObjectURL(zipBlob);
+            const url = window.URL.createObjectURL(blobData);
             console.log(zipFileData)
             console.log(blobData)
             console.log(url)
             gameCodeHtml += `
               <p style="font-size: 0.8em;text-align: center;">
               <strong>${gameCodes[i].codeLanguage.language.charAt(0).toUpperCase() + gameCodes[i].codeLanguage.language.slice(1)}:</strong><br>
-              <a href="${url}" download="${fileName}.zip" class="btn btn-success">Download ${fileName}.zip</a><br>
+              <a href="${url}" download="${fileName}.zip" class="btn btn-success download-link">Download ${fileName}.zip</a><br>
               </p>`;
+
         }
     }
 
     const okGeneratedCode = sanitizeStringWithParagraph(gameCodeHtml);
     document.getElementById("generated-code").innerHTML = okGeneratedCode;
+
+ // Function for handling download.
+ // Url for the file to be downloaded is put in as well as the name the file should be saved to.
+ function downloadFile(url, fileName) {
+    try {
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        link.click();
+    } catch (error) {
+        console.error("Error in download:", error);
+    }
+}
+//Eventlistener to activate downloadFile by click
+    const downloadLinks = document.querySelectorAll(".download-link");
+    downloadLinks.forEach(link => {
+        link.addEventListener("click", (event) => {
+            event.preventDefault();
+            const url = link.href;
+//Below the download attribute value of the clicked link using link.getAttribute("download") which contains the filename
+            const fileName = link.getAttribute("download");
+            downloadFile(url, fileName);
+        });
+    });
+
   }
 
   async function fillSimilarGamesData(id) {
