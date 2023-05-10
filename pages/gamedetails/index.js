@@ -1,10 +1,10 @@
+import { initRating } from "./rating.js";
 import { API_URL } from "../../utils/settings.js";
 import { fetchGetJson,
          fetchPostJsonFormData,
-         sanitizeStringWithParagraph } from "../../utils/utils.js"
+         sanitizeStringWithParagraph } from "../../utils/utils.js";
 
 let isEventListenersAdded = false;
-let hasRated = false;
 
 export async function initGameDetails(id){
     const spinner = document.getElementById("spinner");
@@ -32,26 +32,7 @@ export async function initGameDetails(id){
     /**
      * Rating methods
      */
-    document.querySelector(".star-container").classList.remove("rated");
-    document.querySelectorAll(".fa-star").forEach((star) => {
-        star.classList.remove("checked");
-    });
-    hasRated = false;
-    // Get all stars
-    const stars = document.querySelectorAll(".fa-star");
-    // Add event listener to each star and increase rating by 1 for each star
-    for (let i = 0; i < stars.length; i++) {
-        if (!hasRated) {
-            // Note: because we override the onclick function, instead
-            // of using the addEventListener method, we avoid having
-            // multiple event listeners on the same element.
-            //
-            // Why not use addEventListener? Because we want to be able
-            // to update the id being passed to the onStarsClick function,
-            // when showing another game idea.
-            stars[i].onclick = () => onStarsClick(i, id);
-        }
-    }
+    initRating(id);
 }
 
 async function generateCode(id, form, event) {
@@ -116,20 +97,46 @@ async function generateCode(id, form, event) {
             const zipFileData = gameCodes[i].zipFile;
             const blobData = new Blob([zipFileData], { type: "application/zip" });
 
-            const url = window.URL.createObjectURL(zipBlob);
+            const url = window.URL.createObjectURL(blobData);
             console.log(zipFileData)
             console.log(blobData)
             console.log(url)
             gameCodeHtml += `
               <p style="font-size: 0.8em;text-align: center;">
               <strong>${gameCodes[i].codeLanguage.language.charAt(0).toUpperCase() + gameCodes[i].codeLanguage.language.slice(1)}:</strong><br>
-              <a href="${url}" download="${fileName}.zip" class="btn btn-success">Download ${fileName}.zip</a><br>
+              <a href="${url}" download="${fileName}.zip" class="btn btn-success download-link">Download ${fileName}.zip</a><br>
               </p>`;
+
         }
     }
 
     const okGeneratedCode = sanitizeStringWithParagraph(gameCodeHtml);
     document.getElementById("generated-code").innerHTML = okGeneratedCode;
+
+ // Function for handling download.
+ // Url for the file to be downloaded is put in as well as the name the file should be saved to.
+ function downloadFile(url, fileName) {
+    try {
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        link.click();
+    } catch (error) {
+        console.error("Error in download:", error);
+    }
+}
+//Eventlistener to activate downloadFile by click
+    const downloadLinks = document.querySelectorAll(".download-link");
+    downloadLinks.forEach(link => {
+        link.addEventListener("click", (event) => {
+            event.preventDefault();
+            const url = link.href;
+//Below the download attribute value of the clicked link using link.getAttribute("download") which contains the filename
+            const fileName = link.getAttribute("download");
+            downloadFile(url, fileName);
+        });
+    });
+
   }
 
   async function fillSimilarGamesData(id) {
@@ -155,54 +162,3 @@ async function generateCode(id, form, event) {
     document.getElementById("similar-games").innerHTML = okSimilarGames;
   }
   
-
-function createRating(rating) {
-    return fetch(API_URL + "game-ratings", {
-        method: "POST",
-        body: JSON.stringify(rating),
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });    
-}
-
-function onStarsClick(i, id) {
-    if (hasRated) {
-        console.log("You have already rated this game idea!");
-        return;
-    }
-
-    const score = 5 - i;
-    const rating = {
-        gameIdeaId: id,
-        score,
-    };
-
-    console.log("You clicked on star " + score);
-
-    createRating(rating)
-        .then((res) => res.json())
-        .then((data) => {
-            if (data) {
-                document.getElementById("rating").innerHTML = `${Math.floor(data.totalScoreInPercent)}%`;
-                document.querySelector(".star-container").classList.add("rated");
-                colorStarsBasedOnRating(score);
-                hasRated = true;
-            }
-            else {
-                alert("Something went wrong!");
-            }
-        })
-        .catch((err) => {
-            alert(err);
-        });
-}
-
-function colorStarsBasedOnRating(rating) {
-    const stars = document.querySelectorAll(".fa-star");
-    // Color stars based on rating
-    for (let i = 0; i < rating; i++) {
-        const index = 4 - i;
-        stars[index].classList.add("checked");
-    }
-}
