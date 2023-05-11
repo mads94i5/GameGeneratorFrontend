@@ -13,9 +13,16 @@
     </div>
     <div class="row justify-content-center">
         <hr><h2><strong>Generate game code:</strong></h2><hr>
-        <div class="col-3">
+        
+        <div style="font-size: 1rem;">
+            <strong><i class="fa-solid fa-coins"></i> 1 credit</strong>
+            <p>You're just a click away from generating code for your game. Simply hit the button below, and let the magic begin. Get ready to unlock a world of possibilities!</p>
+        </div>
+
+        <div class="col-4">
             <form id="generate-form">
                 <div class="form-group">
+                    <label for="language" style="font-size: 1rem;">Programming Language:</label>
                     <select name="language" class="form-select">
                         <option value="java">Java</option>
                         <option value="javascript">JavaScript</option>
@@ -25,7 +32,7 @@
                     </select>
                 </div>
                 <input type="hidden" name="gameIdeaId" id="gameIdeaId">
-                <button type="submit" class="btn btn-success" id="generate">Generate</button>
+                <button type="submit" class="btn btn-success btn-block" id="generate">Generate</button>
             </form>
         </div>
     </div>
