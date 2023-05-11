@@ -93,49 +93,17 @@ async function fillGeneratedGameCodeData(id) {
         gameCodeHtml += `<hr><h2><strong>Generated game code:</strong></h2><hr>`;
         for (let i = 0; i < gameCodes.length; i++) {
             const fileName = `${game.title}_${gameCodes[i].codeLanguage.language}`.replace(/#/g, "sharp").replace(/\+/g, "plus").replace(/[^\w\s]/gi, '').replace(/ /g, '_');
-            const zipFileData = "data:application/zip;base64," + gameCodes[i].zipFile;
-            const binaryData = atob(gameCodes[i].zipFile);
-            const blob = new Blob([binaryData], { type: 'application/zip' });
-            const fileData = new File([blob], `${fileName}.zip`, { type: 'application/zip' });
-            const url = URL.createObjectURL(blob);
             
-            console.log(gameCodes[i].zipFile)
-            console.log(zipFileData)
-            console.log(fileData)
-            console.log(url)
             gameCodeHtml += `
               <p style="font-size: 0.8em;text-align: center;">
               <strong>${gameCodes[i].codeLanguage.language.charAt(0).toUpperCase() + gameCodes[i].codeLanguage.language.slice(1)}:</strong><br>
-              <a href="#" data-download-url="${url}" data-download-file-name="${fileName}.zip" class="btn btn-success download-link">Download ${fileName}.zip</a>
+              <a href="${API_URL}gamecode/public/download/${gameCodes[i].id}" target="_blank" class="btn btn-success download-link">Download ${fileName}.zip</a>
               <a href="#/gamecode/${id}/${gameCodes[i].codeLanguage.language}" class="btn btn-primary" data-navigo>View code</a><br>
               </p>`;
         }
     }
     const okGeneratedCode = sanitizeStringWithParagraph(gameCodeHtml);
     document.getElementById("generated-code").innerHTML = okGeneratedCode;
-
-    // Function for handling download.
-    // Url for the file to be downloaded is put in as well as the name the file should be saved to.
-    function downloadFile(url, fileName) {
-        try {
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = fileName;
-            link.click();
-        } catch (error) {
-            console.error("Error in download:", error);
-        }
-    }
-    //Eventlistener to activate downloadFile by click
-    const downloadLinks = document.querySelectorAll(".download-link");
-    downloadLinks.forEach(link => {
-        link.addEventListener("click", (event) => {
-            event.preventDefault();
-            const url = link.getAttribute("data-download-url"); 
-            const fileName = link.getAttribute("data-download-file-name");
-            downloadFile(url, fileName);
-        });
-    });
 }
 
 /*
