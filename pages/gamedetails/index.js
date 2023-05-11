@@ -1,5 +1,5 @@
 import { initRating } from "./rating.js";
-import { API_URL } from "../../utils/settings.js";
+import { API_URL, HOST_URL } from "../../utils/settings.js";
 import { fetchGetJson,
          fetchPostJsonFormData,
          sanitizeStringWithParagraph } from "../../utils/utils.js";
@@ -97,7 +97,7 @@ async function fillGeneratedGameCodeData(id) {
             gameCodeHtml += `
               <p style="font-size: 0.8em;text-align: center;">
               <strong>${gameCodes[i].codeLanguage.language.charAt(0).toUpperCase() + gameCodes[i].codeLanguage.language.slice(1)}:</strong><br>
-              <a href="${API_URL}gamecode/public/download/${gameCodes[i].id}" target="_blank" class="btn btn-success download-link">Download ${fileName}.zip</a>
+              <a href="${HOST_URL}gamecode/download/${gameCodes[i].id}" target="_blank" class="btn btn-success download-link">Download ${fileName}.zip</a>
               <a href="#/gamecode/${id}/${gameCodes[i].codeLanguage.language}" class="btn btn-primary" data-navigo>View code</a><br>
               </p>`;
         }
@@ -106,6 +106,20 @@ async function fillGeneratedGameCodeData(id) {
     document.getElementById("generated-code").innerHTML = okGeneratedCode;
 }
 
+function redirectWithHeader(url, headerName, headerValue) {
+    // Create a new Headers object and add the custom header
+    var headers = new Headers();
+    headers.append(headerName, headerValue);
+  
+    // Create a new Request object with the URL and headers
+    var request = new Request(url, {
+      headers: headers
+    });
+  
+    // Use the Request object to perform the redirect
+    window.location = request;
+  }
+  
 /*
 
 function base64ToBlob(base64String, contentType = "") {
