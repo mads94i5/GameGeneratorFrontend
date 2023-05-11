@@ -1,4 +1,5 @@
 import { initRating } from "./rating.js";
+import { isAuthenticated } from "../../utils/auth.js";
 import { API_URL, HOST_URL } from "../../utils/settings.js";
 import { fetchGetJson,
          fetchPostJsonFormData,
@@ -33,6 +34,11 @@ export async function initGameDetails(id){
      * Rating methods
      */
     initRating(id);
+
+    /**
+     * Hide code generator if user is not authenticated
+     */
+    document.getElementById("code-generator-wrapper").style.display = isAuthenticated() ? "flex" : "none";
 }
 
 async function generateCode(id, form, event) {
@@ -92,32 +98,51 @@ async function fillGeneratedGameCodeData(id) {
     if (gameCodes && gameCodes.length > 0) {
         gameCodeHtml += `<hr><h2><strong>Generated game code:</strong></h2><hr>`;
         for (let i = 0; i < gameCodes.length; i++) {
-            const fileName = `${game.title}_${gameCodes[i].codeLanguage.language}`.replace(/#/g, "sharp").replace(/\+/g, "plus").replace(/[^\w\s]/gi, '').replace(/ /g, '_');
-            
             gameCodeHtml += `
-              <p style="font-size: 0.8em;text-align: center;">
+              <p style="font-size: 0.8em;text-align: center;" class="game-code-output" data-id="${gameCodes[i].id}">
               <strong>${gameCodes[i].codeLanguage.language.charAt(0).toUpperCase() + gameCodes[i].codeLanguage.language.slice(1)}:</strong><br>
-              <a href="${HOST_URL}gamecode/download/${gameCodes[i].id}" target="_blank" class="btn btn-success download-link">Download ${fileName}.zip</a>
               <a href="#/gamecode/${id}/${gameCodes[i].codeLanguage.language}" class="btn btn-primary" data-navigo>View code</a><br>
-              </p>`;
+              </p>`;            
         }
     }
     const okGeneratedCode = sanitizeStringWithParagraph(gameCodeHtml);
     document.getElementById("generated-code").innerHTML = okGeneratedCode;
+
+    for (let i = 0; i < gameCodes.length; i++) {
+        const id = gameCodes[i].id;
+
+        const button = document.createElement("button");
+        button.classList.add("btn");
+        button.classList.add("btn-secondary");
+        button.innerText = "Download " + game.title + " " + gameCodes[i].codeLanguage.language + " zip";
+        button.addEventListener("click", async function (event) {
+            downloadZipFile(game.title, gameCodes[i].codeClasses, gameCodes[i].codeLanguage.fileExtension);
+        });
+
+        const gameCodeOutput = document.querySelector(`.game-code-output[data-id="${id}"]`);
+        gameCodeOutput.appendChild(button);
+    }
 }
 
-function redirectWithHeader(url, headerName, headerValue) {
-    // Create a new Headers object and add the custom header
-    var headers = new Headers();
-    headers.append(headerName, headerValue);
+function downloadZipFile(zipFile, codeClasses, fileExtension) {
+    // Create a new instance of JSZip
+    var zip = new JSZip();
   
-    // Create a new Request object with the URL and headers
-    var request = new Request(url, {
-      headers: headers
-    });
+    for (let i = 0; i < codeClasses.length; i++) {
+        zip.file(`${codeClasses[i].name}.${fileExtension}`, codeClasses[i].code);
+    }
   
-    // Use the Request object to perform the redirect
-    window.location = request;
+    // Generate the zip file asynchronously
+    zip.generateAsync({ type: "blob" })
+      .then(function (content) {
+        // Create a download link for the zip file
+        var link = document.createElement("a");
+        link.href = URL.createObjectURL(content);
+        link.download = `${zipFile}.zip`; // Set the name of the zip file
+  
+        // Trigger the download
+        link.click();
+      });
   }
   
 /*
