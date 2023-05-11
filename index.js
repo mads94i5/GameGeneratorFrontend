@@ -11,6 +11,7 @@ import InitHeader from "./components/header/header.js"
 import { initGames } from "./pages/games/index.js"
 import { initCreateGame } from "./pages/games/create.js"
 import { initGameDetails } from "./pages/gamedetails/index.js"
+import { initGameCode } from "./pages/gamecode/index.js"
 import { initHome } from "./pages/home/index.js";
 import { initLogin } from "./pages/login/login.js"
 
@@ -20,6 +21,7 @@ window.addEventListener("load", async () => {
   const templateGames = await loadHtml("./pages/games/index.html")
   const templateCreateGame = await loadHtml("./pages/games/create.html")
   const templateGameDetails = await loadHtml("./pages/gamedetails/index.html")
+  const templateGameCode = await loadHtml("./pages/gamecode/index.html")
   const templateNotFound = await loadHtml("./pages/notFound/notFound.html")
   const templateLogin = await loadHtml("./pages/login/login.html")
 
@@ -54,6 +56,10 @@ window.addEventListener("load", async () => {
       "/gamedetails/:id": ({data}) => {
         renderTemplate(templateGameDetails, "content")
         initGameDetails(data.id)
+      },
+      "/gamecode/:id/:language": ({data}) => {
+        renderTemplate(templateGameCode, "content")
+        initGameCode(data.id, data.language)
       },
       "/login": () => {
         renderTemplate(templateLogin, "content")

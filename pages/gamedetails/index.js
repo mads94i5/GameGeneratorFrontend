@@ -93,17 +93,21 @@ async function fillGeneratedGameCodeData(id) {
         gameCodeHtml += `<hr><h2><strong>Generated game code:</strong></h2><hr>`;
         for (let i = 0; i < gameCodes.length; i++) {
             const fileName = `${game.title}_${gameCodes[i].codeLanguage.language}`.replace(/#/g, "sharp").replace(/\+/g, "plus").replace(/[^\w\s]/gi, '').replace(/ /g, '_');
-            const zipFileData = btoa(gameCodes[i].zipFile);
-            const fileData = new File([zipFileData], { type: "application/zip" });
-
-            const url = window.URL.createObjectURL(fileData);
+            const zipFileData = "data:application/zip;base64," + gameCodes[i].zipFile;
+            const binaryData = atob(gameCodes[i].zipFile);
+            const blob = new Blob([binaryData], { type: 'application/zip' });
+            const fileData = new File([blob], `${fileName}.zip`, { type: 'application/zip' });
+            const url = URL.createObjectURL(blob);
+            
+            console.log(gameCodes[i].zipFile)
             console.log(zipFileData)
             console.log(fileData)
             console.log(url)
             gameCodeHtml += `
               <p style="font-size: 0.8em;text-align: center;">
               <strong>${gameCodes[i].codeLanguage.language.charAt(0).toUpperCase() + gameCodes[i].codeLanguage.language.slice(1)}:</strong><br>
-              <a href="${url}" download="${fileName}.zip" class="btn btn-success download-link">Download ${fileName}.zip</a><br>
+              <a href="#" data-download-url="${url}" data-download-file-name="${fileName}.zip" class="btn btn-success download-link">Download ${fileName}.zip</a>
+              <a href="#/gamecode/${id}/${gameCodes[i].codeLanguage.language}" class="btn btn-primary" data-navigo>View code</a><br>
               </p>`;
         }
     }
@@ -127,13 +131,36 @@ async function fillGeneratedGameCodeData(id) {
     downloadLinks.forEach(link => {
         link.addEventListener("click", (event) => {
             event.preventDefault();
-            const url = link.href;
-            //Below the download attribute value of the clicked link using link.getAttribute("download") which contains the filename
-            const fileName = link.getAttribute("download");
+            const url = link.getAttribute("data-download-url"); 
+            const fileName = link.getAttribute("data-download-file-name");
             downloadFile(url, fileName);
         });
     });
 }
+
+/*
+
+function base64ToBlob(base64String, contentType = "") {
+    const sliceSize = 1024;
+    const byteCharacters = atob(base64String);
+    const bytesLength = byteCharacters.length;
+    const slicesCount = Math.ceil(bytesLength / sliceSize);
+    const byteArrays = new Array(slicesCount);
+  
+    for (let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+      const begin = sliceIndex * sliceSize;
+      const end = Math.min(begin + sliceSize, bytesLength);
+  
+      const bytes = new Array(end - begin);
+      for (let offset = begin, i = 0; offset < end; ++i, ++offset) {
+        bytes[i] = byteCharacters[offset].charCodeAt(0);
+      }
+      byteArrays[sliceIndex] = new Uint8Array(bytes);
+    }
+    return new Blob(byteArrays, { type: contentType });
+}
+
+*/
 
 async function fillSimilarGamesData(id) {
     const game = await fetchGetJson(API_URL + `gameidea/public/get/${id}`);
