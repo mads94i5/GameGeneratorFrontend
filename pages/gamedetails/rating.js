@@ -127,7 +127,7 @@ function completeRating(rating) {
         .then((res) => res.json())
         .then((data) => {
             if (data) {
-                setRatingOutput(data.totalScoreInPercent);
+                setRatingOutput(data);
                 setContainerRated(true);
                 colorStarsBasedOnRating(rating.score);
 
@@ -150,10 +150,17 @@ function completeRating(rating) {
  * @returns void
  * @private
  */
-function setRatingOutput(rating) {
+function setRatingOutput(data) {
+    // Set new rating
     const ratingOutput = document.getElementById(ratingOutputId);
     if (ratingOutput) {
-        ratingOutput.innerHTML = `${Math.floor(rating)}%`;
+        ratingOutput.innerHTML = `${Math.floor(data.totalScoreInPercent)}%`;
+    }
+
+    // Set new rating count
+    const ratingCountOutput = document.getElementById("rating-count");
+    if (ratingCountOutput) {
+        ratingCountOutput.innerHTML = `${data.numberOfRatings}`;
     }
 }
 

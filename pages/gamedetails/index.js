@@ -1,6 +1,7 @@
 import { initRating } from "./rating.js";
+import { refreshCredits, hasAnyCredits } from "../../utils/credit.js";
 import { isAuthenticated } from "../../utils/auth.js";
-import { API_URL, HOST_URL } from "../../utils/settings.js";
+import { API_URL } from "../../utils/settings.js";
 import { fetchGetJson,
          fetchPostJsonFormData,
          sanitizeStringWithParagraph } from "../../utils/utils.js";
@@ -42,6 +43,11 @@ export async function initGameDetails(id){
 }
 
 async function generateCode(id, form, event) {
+    if (!hasAnyCredits()) {
+      alert("You don't have any credits left. Please buy more credits.");
+      return;
+    }
+
     const token = localStorage.getItem("jwtToken")
     const spinner = document.getElementById("spinner")
     const generateButton = document.getElementById("generate")
@@ -58,6 +64,7 @@ async function generateCode(id, form, event) {
         errorDiv.innerHTML = '';
         generateButton.disabled = false;
         generateButton.classList.add("btn-success")
+        refreshCredits(); // Update credits
       })
       .catch(error => {
         console.error(error);
@@ -82,6 +89,7 @@ async function generateCode(id, form, event) {
         <strong>Genre:</strong> ${game.genre} <br>
         <strong>You play as:</strong> ${game.player} <br>
         <strong>Rating:</strong> <span id="rating">${Math.floor(game.totalRatingInPercent)}%</span><br>
+        <strong>Number of Ratings:</strong> <span id="rating-count">${Math.floor(game.numberOfRatings)}</span><br>
         </p><br>`;
 
     const okGame = sanitizeStringWithParagraph(gameHtml);

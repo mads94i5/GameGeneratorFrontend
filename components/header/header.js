@@ -1,4 +1,4 @@
-import { isAuthenticated, removeToken } from "../../utils/auth.js"
+import { isAuthenticated, removeToken, isExpired } from "../../utils/auth.js"
 import { getCredits, removeCredits } from "../../utils/credit.js";
 
 function createLink(href, text) {
@@ -25,7 +25,22 @@ function refreshCreditsView() {
     wrapper.appendChild(creditsView);
 }
 
+function logout() {
+    if (isAuthenticated()) {
+        removeToken();
+        removeCredits();
+    }
+
+    window.router.navigate("/login");
+}
+
 export default function InitHeader() {
+    if (isAuthenticated() && isExpired()) {
+        alert("Your session has expired. Please login again.");
+        logout();
+    }
+
+    
     refreshCreditsView();
 
     const link = isAuthenticated() ? createLink("#", "Logout") : createLink("#login", "Login");
@@ -33,11 +48,6 @@ export default function InitHeader() {
         document.getElementById("auth-link").querySelector("a").addEventListener("click", function (e) {
             e.preventDefault();
 
-            if (isAuthenticated()) {
-                removeToken();
-                removeCredits();
-            }
-
-            window.router.navigate("/login");
+            logout();
         });
 }

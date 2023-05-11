@@ -129,6 +129,7 @@ export async function initGames(pg, match) {
       <td>${game.genre}</td>
       <td>${game.player}</td>
       <td>${Math.floor(game.totalRatingInPercent)}%</td>
+      <td>${game.numberOfRatings}</td>
       <td><a href="#/gamedetails/${game.id}" class="btn btn-sm btn-success">Game info</a></td>
     </tr>
   `);
