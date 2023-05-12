@@ -67,7 +67,6 @@ async function generateCode(id, form, event) {
         refreshCredits(); // Update credits
       })
       .catch(error => {
-        console.error(error);
         errorDiv.innerHTML = error;
         spinner.style.display = "none";
         generateButton.disabled = false;
@@ -108,9 +107,9 @@ async function generateCode(id, form, event) {
         for (let i = 0; i < gameCodes.length; i++) {
             const codeLanguage = gameCodes[i].codeLanguage;
             const fileName = `${game.title}_${codeLanguage.language}`.replace(/#/g, "sharp").replace(/\+/g, "plus").replace(/[^\w\s]/gi, '').replace(/ /g, '_');
-            const id = gameCodes[i].id;
+            const gameCodeid = gameCodes[i].id;
             gameCodeHtml += `
-              <p style="font-size: 0.8em;text-align: center;" class="game-code-output" data-id="${id}">
+              <p style="font-size: 0.8em;text-align: center;" class="game-code-output" data-id="${gameCodeid}">
                 <strong>${codeLanguage.language.charAt(0).toUpperCase() + codeLanguage.language.slice(1)}:</strong><br>
                 <button class="btn btn-secondary download-btn" data-filename="${fileName}" data-code-classes-index="${i}" data-file-extension="${codeLanguage.fileExtension}">Download ${fileName}.zip</button>
                 <a href="#/gamecode/${id}/${codeLanguage.language}" class="btn btn-primary" data-navigo>View code</a><br>
