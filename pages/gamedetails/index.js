@@ -59,11 +59,11 @@ async function generateCode(id, form, event) {
   
     await fetchPostJsonFormData(API_URL + `gamecode/generate`, form, event, token)
       .then(() => {
-        fillGeneratedGameCodeData(id)
         spinner.style.display = "none";
         errorDiv.innerHTML = '';
         generateButton.disabled = false;
         generateButton.classList.add("btn-success")
+        fillGeneratedGameCodeData(id);
         refreshCredits(); // Update credits
       })
       .catch(error => {
@@ -98,46 +98,46 @@ async function generateCode(id, form, event) {
     return game;
   }
 
-async function fillGeneratedGameCodeData(id) {
+  async function fillGeneratedGameCodeData(id) {
     const game = await fetchGetJson(API_URL + `gameidea/public/get/${id}`);
     const gameCodes = await fetchGetJson(API_URL + `gamecode/public/get/${id}`);
-    let gameCodeHtml = ''
+    let gameCodeHtml = '';
     // Build game code HTML
     if (gameCodes && gameCodes.length > 0) {
         gameCodeHtml += `<hr><h2><strong>Generated game code:</strong></h2><hr>`;
         for (let i = 0; i < gameCodes.length; i++) {
+            const codeLanguage = gameCodes[i].codeLanguage;
+            const fileName = `${game.title}_${codeLanguage.language}`.replace(/#/g, "sharp").replace(/\+/g, "plus").replace(/[^\w\s]/gi, '').replace(/ /g, '_');
+            const id = gameCodes[i].id;
             gameCodeHtml += `
-              <p style="font-size: 0.8em;text-align: center;" class="game-code-output" data-id="${gameCodes[i].id}">
-              <strong>${gameCodes[i].codeLanguage.language.charAt(0).toUpperCase() + gameCodes[i].codeLanguage.language.slice(1)}:</strong><br>
-              <a href="#/gamecode/${id}/${gameCodes[i].codeLanguage.language}" class="btn btn-primary" data-navigo>View code</a><br>
+              <p style="font-size: 0.8em;text-align: center;" class="game-code-output" data-id="${id}">
+                <strong>${codeLanguage.language.charAt(0).toUpperCase() + codeLanguage.language.slice(1)}:</strong><br>
+                <button class="btn btn-secondary download-btn" data-filename="${fileName}" data-code-classes-index="${i}" data-file-extension="${codeLanguage.fileExtension}">Download ${fileName}.zip</button>
+                <a href="#/gamecode/${id}/${codeLanguage.language}" class="btn btn-primary" data-navigo>View code</a><br>
               </p>`;            
         }
     }
+
     const okGeneratedCode = sanitizeStringWithParagraph(gameCodeHtml);
     document.getElementById("generated-code").innerHTML = okGeneratedCode;
 
-    for (let i = 0; i < gameCodes.length; i++) {
-        const id = gameCodes[i].id;
+    const downloadButtons = document.querySelectorAll('.download-btn');
+    downloadButtons.forEach((button) => {
+      button.addEventListener('click', function() {
+        const fileName = button.dataset.filename;
+        const i = button.dataset.codeClassesIndex;
+        const fileExtension = button.dataset.fileExtension;
+        downloadZipFile(fileName, gameCodes[i].codeClasses, fileExtension);
+      });
+    });
+  }
 
-        const button = document.createElement("button");
-        button.classList.add("btn");
-        button.classList.add("btn-secondary");
-        button.innerText = "Download " + game.title + " " + gameCodes[i].codeLanguage.language + " zip";
-        button.addEventListener("click", async function (event) {
-            downloadZipFile(game.title, gameCodes[i].codeClasses, gameCodes[i].codeLanguage.fileExtension);
-        });
-
-        const gameCodeOutput = document.querySelector(`.game-code-output[data-id="${id}"]`);
-        gameCodeOutput.appendChild(button);
-    }
-}
-
-function downloadZipFile(zipFile, codeClasses, fileExtension) {
+  function downloadZipFile(fileName, codeClasses, fileExtension) {
     // Create a new instance of JSZip
     var zip = new JSZip();
   
     for (let i = 0; i < codeClasses.length; i++) {
-        zip.file(`${codeClasses[i].name}.${fileExtension}`, codeClasses[i].code);
+        zip.file(`${codeClasses[i].name}${fileExtension}`, codeClasses[i].code);
     }
   
     // Generate the zip file asynchronously
@@ -146,38 +146,14 @@ function downloadZipFile(zipFile, codeClasses, fileExtension) {
         // Create a download link for the zip file
         var link = document.createElement("a");
         link.href = URL.createObjectURL(content);
-        link.download = `${zipFile}.zip`; // Set the name of the zip file
+        link.download = `${fileName}.zip`; // Set the name of the zip file
   
         // Trigger the download
         link.click();
       });
   }
-  
-/*
 
-function base64ToBlob(base64String, contentType = "") {
-    const sliceSize = 1024;
-    const byteCharacters = atob(base64String);
-    const bytesLength = byteCharacters.length;
-    const slicesCount = Math.ceil(bytesLength / sliceSize);
-    const byteArrays = new Array(slicesCount);
-  
-    for (let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
-      const begin = sliceIndex * sliceSize;
-      const end = Math.min(begin + sliceSize, bytesLength);
-  
-      const bytes = new Array(end - begin);
-      for (let offset = begin, i = 0; offset < end; ++i, ++offset) {
-        bytes[i] = byteCharacters[offset].charCodeAt(0);
-      }
-      byteArrays[sliceIndex] = new Uint8Array(bytes);
-    }
-    return new Blob(byteArrays, { type: contentType });
-}
-
-*/
-
-async function fillSimilarGamesData(id) {
+  async function fillSimilarGamesData(id) {
     const game = await fetchGetJson(API_URL + `gameidea/public/get/${id}`);
     let similarGamesHtml = ''
     // Build similar games HTML
@@ -197,4 +173,4 @@ async function fillSimilarGamesData(id) {
     }
     const okSimilarGames = sanitizeStringWithParagraph(similarGamesHtml);
     document.getElementById("similar-games").innerHTML = okSimilarGames;
-}
+  }
